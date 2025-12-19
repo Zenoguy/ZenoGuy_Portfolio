@@ -37,9 +37,9 @@ export default function ClientLayout({
   if (!isHydrated) return null;
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen">
       {/* ================= ORB (INTERACTIVE BACKGROUND) ================= */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0 overflow-hidden">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[6000px]">
           <Orb
             hoverIntensity={0.9}
@@ -51,7 +51,6 @@ export default function ClientLayout({
       </div>
 
       {/* ================= CONTENT LAYER ================= */}
-      {/* Remove min-h-screen and let content determine height */}
       <div className="relative z-10">
         <AnimatePresence mode="wait">
           {isLoading && (
