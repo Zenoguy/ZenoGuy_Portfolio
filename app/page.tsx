@@ -69,9 +69,9 @@ function HeroSection() {
     offset: ['start start', 'end start']
   });
 
-  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
-  const imageRotate = useTransform(scrollYProgress, [0, 1], [0, 15]);
-  const imageOpacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 4]);
+  const imageRotate = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const imageOpacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const textY = useTransform(scrollYProgress, [0, 0.8], [0, -200]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
@@ -278,19 +278,21 @@ function HeroSection() {
     </div>
   );
 }
-
 function MarqueeSection() {
-  const text = "REACT • NEXTJS • TYPESCRIPT • PYTHON • JAVA • DESIGN • ";
+  const text = "REACT • NEXTJS • TYPESCRIPT • PYTHON • JAVA •  ";
   
   return (
-    <div className="relative py-20 border-y border-border overflow-hidden">
+    <div className="relative py-20 border-y border-border overflow-hidden flex items-center">
       <motion.div
         animate={{ x: [0, -1000] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="flex whitespace-nowrap"
       >
         {[...Array(10)].map((_, i) => (
-          <span key={i} className="text-6xl md:text-8xl font-black text-muted-foreground/20 mx-8">
+          <span 
+            key={i} 
+            className="text-6xl md:text-8xl font-black text-muted-foreground/20 mx-8 leading-none"
+          >
             {text}
           </span>
         ))}

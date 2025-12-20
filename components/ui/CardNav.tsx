@@ -139,40 +139,10 @@ const CardNav = ({
     if (el) cardsRef.current[i] = el;
   };
 
-  // Don't render until mounted to prevent flash
-  if (!mounted) {
-    return (
-      <div className={`fixed left-1/2 -translate-x-1/2 top-[1.2em] w-[92%] max-w-[820px] z-[9999] ${className}`}>
-        <nav
-          className="rounded-xl shadow-lg relative overflow-hidden backdrop-blur-xl border h-[60px] bg-white/10 border-white/20"
-          style={{ 
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
-          }}
-        >
-          <div className="absolute inset-x-0 top-0 h-[60px] flex items-center justify-between px-4">
-            <div className="flex flex-col gap-[6px]">
-              <span className="w-6 h-[2px] bg-white" style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.3)' }} />
-              <span className="w-6 h-[2px] bg-white" style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.3)' }} />
-            </div>
-            <img 
-              src={logoDark || logo} 
-              alt={logoAlt} 
-              className="h-[75px] drop-shadow-lg" 
-              style={{ filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))' }}
-            />
-            <div className="w-9 h-9 flex items-center justify-center rounded-md bg-white/10 border border-white/20">
-              <Sun size={18} className="text-white" />
-            </div>
-          </div>
-        </nav>
-      </div>
-    );
-  }
-
   return (
-    <div
+    <div 
       className={`fixed left-1/2 -translate-x-1/2 top-[1.2em] w-[92%] max-w-[820px] z-[9999] ${className}`}
+      style={{ opacity: mounted ? 1 : 0, transition: 'opacity 0.2s' }}
     >
       <nav
         ref={navRef}
