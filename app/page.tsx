@@ -487,7 +487,7 @@ function FeaturedWork() {
   );
 }
 
-export function SkillsSection() {
+function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState(null);
 
   const skills = [
