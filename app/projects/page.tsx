@@ -6,43 +6,63 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 const projects = [
   {
     id: 1,
-    title: 'Ethereal',
-    category: 'E-commerce Platform',
+    title: 'SpendSight',
+    category: 'FinTech AI Pipeline',
     year: '2024',
-    description: 'A luxury fashion platform merging AI personalization with immersive 3D visualization.',
-    services: ['Creative Direction', 'Development', '3D Design'],
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1920&q=80',
-    color: '#4F46E5'
+    description: 'Hybrid AI pipeline that parses financial PDFs, classifies transactions through Regex → MiniLM → LLM stages, and generates RAG-powered insights with multi-bank support.',
+    services: ['AI/ML', 'OCR', 'RAG', 'Database'],
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80',
+    color: '#4F46E5',
+    github: 'https://github.com/Zenoguy/SpendSight_',
+    live: 'https://spendsight.netlify.app/'
   },
   {
     id: 2,
-    title: 'Neural Canvas',
-    category: 'AI Art Platform',
+    title: 'Data Wiper',
+    category: 'Security Toolkit',
     year: '2024',
-    description: 'Where human creativity meets machine learning in real-time artistic collaboration.',
-    services: ['AI Integration', 'UX Design', 'Frontend'],
-    image: 'https://images.unsplash.com/photo-1618172193622-ae2d025f4032?w=1920&q=80',
-    color: '#EC4899'
+    description: 'Enterprise-grade secure drive sanitization with zero-fill and AES-128 encryption wipes. Features partition backup, verification system, and compliance certificates.',
+    services: ['Linux', 'Cryptography', 'Security'],
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80',
+    color: '#EC4899',
+    github: 'https://github.com/Zenoguy/data_wiping_linux',
+    live: 'https://e2-x-fontend-paql.vercel.app/' // Add your live demo link here
   },
   {
     id: 3,
-    title: 'Kinetic',
-    category: 'Motion Studio',
+    title: 'Leaf Disease Segmenter',
+    category: 'Computer Vision Research',
     year: '2024',
-    description: 'Physics-based interactions and generative art responding to user movement.',
-    services: ['Motion Design', 'WebGL', 'Interactive'],
-    image: 'https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?w=1920&q=80',
-    color: '#10B981'
+    description: 'Hierarchical panoptic segmentation using ConvNeXt-Tiny for plant health monitoring. Dual-headed architecture with custom loss functions achieving 0.72 F1 score.',
+    services: ['PyTorch', 'CNN', 'Research'],
+    image: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80',
+    color: '#10B981',
+    github: 'https://github.com/Zenoguy/Panoptic_Segmentation',
+    live: '' // Add your live demo link here
   },
   {
     id: 4,
-    title: 'Apex Finance',
-    category: 'FinTech Dashboard',
+    title: 'ChatApp',
+    category: 'Desktop Messaging',
     year: '2024',
-    description: 'A sophisticated trading terminal with real-time data visualization.',
-    services: ['Data Viz', 'Real-time', 'Dashboard'],
-    image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1920&q=80',
-    color: '#F59E0B'
+    description: 'Real-time chat application built with Java Swing, Sockets, and MySQL. Features message persistence, modern GUI, and timestamped messaging with custom UI.',
+    services: ['Java', 'Sockets', 'MySQL'],
+    image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1920&q=80',
+    color: '#F59E0B',
+    github: 'https://github.com/Zenoguy/ChatApp-Java',
+    live: '' // Add your live demo link here
+  },
+  {
+    id: 5,
+    title: 'Space Shooters',
+    category: 'Arcade Game',
+    year: '2024',
+    description: 'Classic arcade-style space shooter with Pygame featuring multiple enemy types, progressive difficulty, power-ups, health system, and full audio integration.',
+    services: ['Python', 'Pygame', 'Game Dev'],
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=80',
+    color: '#8B5CF6',
+    github: 'https://github.com/Zenoguy/Space_Shooters',
+    live: 'https://zenoguy.itch.io/space-shooters-concept-game'
   },
 ];
 
@@ -124,7 +144,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
 
               <div className="space-y-4 mb-10">
                 <div className="text-sm text-muted-foreground uppercase tracking-widest mb-3">
-                  Services
+                  Key Features
                 </div>
                 <div className="flex flex-wrap gap-3">
                   {project.services.map((service) => (
@@ -138,19 +158,44 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 </div>
               </div>
 
-              <motion.button
-                whileHover={{ x: 10 }}
-                className="group flex items-center gap-3 text-foreground text-lg font-medium"
-              >
-                <span>View Project</span>
-                <motion.span
-                  className="text-2xl"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+              <div className="flex gap-4 flex-wrap">
+                <motion.a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ x: 10 }}
+                  className="group flex items-center gap-3 text-foreground text-lg font-medium"
                 >
-                  →
-                </motion.span>
-              </motion.button>
+                  <span>View on GitHub</span>
+                  <motion.span
+                    className="text-2xl"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    →
+                  </motion.span>
+                </motion.a>
+
+                <motion.a
+                  href={project.live || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-6 py-3 rounded-full text-sm font-bold transition-opacity ${
+                    project.live 
+                      ? 'bg-foreground text-background hover:opacity-90' 
+                      : 'bg-muted text-muted-foreground cursor-not-allowed opacity-50'
+                  }`}
+                  onClick={(e) => {
+                    if (!project.live) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  {project.live ? 'View Live Demo' : 'Live Demo Coming Soon'}
+                </motion.a>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -210,9 +255,9 @@ function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: 'easeOut' }}
-          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+          className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
         >
-          Crafting digital experiences that push boundaries and inspire innovation
+          From AI pipelines to game development, explore projects that solve real problems with elegant code
         </motion.p>
       </motion.div>
 
@@ -260,13 +305,14 @@ export default function ProjectsPage() {
           <p className="text-xl text-muted-foreground mb-12">
             Let's create something extraordinary together
           </p>
-          <motion.button
+          <motion.a
+            href="/contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-12 py-5 bg-foreground text-background text-lg font-semibold rounded-full hover:opacity-90 transition-opacity"
+            className="inline-block px-12 py-5 bg-foreground text-background text-lg font-semibold rounded-full hover:opacity-90 transition-opacity"
           >
             Get in Touch
-          </motion.button>
+          </motion.a>
         </motion.div>
       </section>
     </div>

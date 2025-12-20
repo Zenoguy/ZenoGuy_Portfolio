@@ -3,6 +3,62 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
+// Import CardSwap component (adjust path as needed)
+// import CardSwap, { Card } from '@/components/ui/CardSwap';
+
+// Placeholder CardSwap components for this example
+function Card({ children }) {
+  return <div className="w-full h-full">{children}</div>;
+}
+
+function CardSwap({ children, cardDistance = 60, verticalDistance = 70, delay = 3000, pauseOnHover = false }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const childrenArray = Array.isArray(children) ? children : [children];
+
+  useEffect(() => {
+    if (isPaused && pauseOnHover) return;
+    
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % childrenArray.length);
+    }, delay);
+
+    return () => clearInterval(interval);
+  }, [isPaused, pauseOnHover, delay, childrenArray.length]);
+
+  return (
+    <div 
+      className="relative w-full h-full"
+      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
+      onMouseLeave={() => pauseOnHover && setIsPaused(false)}
+    >
+      {childrenArray.map((child, index) => {
+        const offset = (index - currentIndex + childrenArray.length) % childrenArray.length;
+        return (
+          <motion.div
+            key={index}
+            className="absolute inset-0"
+            initial={false}
+            animate={{
+              x: offset * cardDistance,
+              y: offset * verticalDistance,
+              scale: 1 - offset * 0.05,
+              opacity: offset === 0 ? 1 : 0.7,
+              zIndex: childrenArray.length - offset,
+            }}
+            transition={{
+              duration: 0.5,
+              ease: "easeInOut"
+            }}
+          >
+            {child}
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
 function HeroSection() {
   const containerRef = useRef(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -172,7 +228,7 @@ function HeroSection() {
                 className="mt-12 max-w-2xl"
               >
                 <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed">
-                  Turning caffeine and keystrokes into digital experiences that actually work. Sometimes.
+                  Turning caffeine and keystrokes into digital experiences that actually work. Mostly.
                 </p>
               </motion.div>
 
@@ -261,114 +317,152 @@ function MarqueeSection() {
 function FeaturedWork() {
   const sectionRef = useRef(null);
   
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start']
-  });
-
   const works = [
     {
       title: "SpendSight",
-      subtitle: "FINTECH • HACKATHON WINNER",
-      desc: "24-hour sprint. PDF chaos to clean insights. Won special mention.",
+      subtitle: "FINTECH • AI PIPELINE • HACKATHON WINNER",
+      desc: "Hybrid AI pipeline that parses financial PDFs, classifies transactions through Regex → MiniLM → LLM stages, and generates RAG-powered insights. Multi-bank support, secure storage, and real-time analytics dashboard.",
       image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-      color: "from-blue-500 to-cyan-500"
+      color: "from-blue-500 to-cyan-500",
+      link: "https://github.com/Zenoguy/SpendSight_"
     },
     {
-      title: "Chat App",
-      subtitle: "JAVA • SOCKETS • SWING",
-      desc: "Built in one night because my portfolio looked empty. Worth it.",
-      image: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1200&q=80",
-      color: "from-purple-500 to-pink-500"
+      title: "E2X",
+      subtitle: "LINUX • SECURITY • CRYPTOGRAPHY",
+      desc: "Enterprise-grade secure drive sanitization toolkit with zero-fill and AES-128 encryption wipes. Features partition backup, verification system, and compliance certificate generation for forensic-proof data destruction.",
+      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80",
+      color: "from-purple-500 to-pink-500",
+      link: "https://github.com/Zenoguy/data_wiping_linux"
     },
     {
-      title: "Space Shooter",
-      subtitle: "PYGAME • GAME DEV",
-      desc: "Collision detection, sound effects, and surprisingly functional gameplay.",
-      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80",
-      color: "from-orange-500 to-red-500"
+      title: "Leaf Disease Segmenter",
+      subtitle: "COMPUTER VISION • CONVNEXT • RESEARCH",
+      desc: "Hierarchical panoptic segmentation model using ConvNeXt-Tiny for plant health monitoring. Dual-headed architecture detects leaf regions and disease lesions with custom loss functions, achieving 0.72 F1 score on multi-dataset fusion.",
+      image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200&q=80",
+      color: "from-green-500 to-emerald-500",
+      link: "https://github.com/Zenoguy/Panoptic_Segmentation"
     },
   ];
-
   return (
     <section ref={sectionRef} className="relative py-40 px-6">
       <div className="max-w-7xl mx-auto">
         
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-32"
-        >
-          <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.85] mb-8">
-            <span className="block text-foreground">FEATURED</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">WORK</span>
-          </h2>
-          <div className="flex items-center gap-8">
-            <div className="h-1 w-32 bg-foreground" />
-            <p className="text-xl text-muted-foreground">Projects that pushed my limits</p>
-          </div>
-        </motion.div>
+        {/* Section layout - side by side */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-start mb-32">
+          
+          {/* Left: Section header */}
+<motion.div
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 1.2, ease: "easeOut" }}
+  viewport={{ once: true }}
+  className="
+    pt-10
+    lg:col-span-2
 
-        {/* Projects grid - staggered layout */}
-        <div className="space-y-40">
-          {works.map((work, i) => (
-            <motion.a
-              key={work.title}
-              href="/projects"
-              initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: i * 0.2 }}
-              viewport={{ once: true }}
-              className="group block"
-            >
-              <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${i % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
-                
-                {/* Image */}
-                <div className={`relative aspect-[16/10] rounded-3xl overflow-hidden ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                  <motion.div
-                    className="absolute inset-0 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${work.image})` }}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ duration: 0.6 }}
-                  />
-                  <div className={`absolute inset-0 bg-gradient-to-br ${work.color} opacity-20 group-hover:opacity-30 transition-opacity`} />
-                  
-                  {/* Floating number */}
-                  <div className="absolute top-8 right-8 text-foreground/20 text-9xl font-black leading-none">
-                    {String(i + 1).padStart(2, '0')}
-                  </div>
-                </div>
+    /* BREAK OUT OF GRID */
+    lg:ml-[-8vw]
+    xl:ml-[-10vw]
 
-                {/* Content */}
-                <div className={i % 2 === 1 ? 'lg:order-1' : ''}>
-                  <motion.div
-                    whileHover={{ x: i % 2 === 1 ? -10 : 10 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground font-bold mb-4">
-                      {work.subtitle}
+    /* Allow big text to breathe */
+    max-w-none
+  "
+>
+  <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.8] tracking-tighter mb-8">
+    <span className="block text-foreground">FEATURED</span>
+    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+      WORK
+    </span>
+  </h2>
+
+  <div className="flex items-center gap-8 mb-8">
+    <div className="h-1 w-32 bg-foreground" />
+    <p className="text-xl text-muted-foreground max-w-xl">
+      Systems forged under constraints, not concepts
+    </p>
+  </div>
+
+  <p className="text-lg text-muted-foreground leading-relaxed mb-6 max-w-xl">
+    A selection of backend-heavy products where architecture, performance,
+    and trade-offs mattered more than surface polish.
+  </p>
+
+  <p className="text-base text-muted-foreground/70 leading-relaxed max-w-lg">
+    Built to scale, fail gracefully, and survive real users, deadlines,
+    and production traffic.
+  </p>
+</motion.div>
+
+
+          {/* Right: CardSwap container */}
+          <div
+            className="
+              relative 
+              h-[700px] 
+              lg:col-span-3
+              lg:translate-x-24
+              xl:translate-x-32
+            "
+          >
+
+          <CardSwap
+            cardDistance={40}
+            verticalDistance={50}
+            delay={3000}
+            pauseOnHover={true}
+          >
+            {works.map((work, i) => (
+              <Card key={work.title}>
+                <a
+                  href="/projects"
+                  className="group block h-full"
+                >
+                  <div className="relative h-full rounded-3xl overflow-hidden border-2 border-border hover:border-foreground transition-all duration-300 bg-background shadow-2xl">
+                    
+                    {/* Background image */}
+                    <div className="absolute inset-0">
+                      <div 
+                        className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                        style={{ backgroundImage: `url(${work.image})` }}
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-br ${work.color} opacity-30 group-hover:opacity-40 transition-opacity`} />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
                     </div>
-                    <h3 className="text-4xl md:text-5xl font-black text-foreground mb-6 leading-none">
-                      {work.title}
-                    </h3>
-                    <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                      {work.desc}
-                    </p>
-                    <motion.div
-                      className="flex items-center gap-3 text-foreground font-black text-xl"
-                      whileHover={{ x: 5 }}
-                    >
-                      <span>VIEW PROJECT</span>
-                      <span>→</span>
-                    </motion.div>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.a>
-          ))}
+
+                    {/* Content */}
+                    <div className="relative h-full p-12 flex flex-col justify-end">
+                      
+                      {/* Floating number */}
+                      <div className="absolute top-8 right-8 text-foreground/10 text-9xl font-black leading-none">
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+
+                      {/* Text content */}
+                      <div>
+                        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground font-bold mb-4">
+                          {work.subtitle}
+                        </div>
+                        <h3 className="text-5xl md:text-6xl font-black text-foreground mb-6 leading-none">
+                          {work.title}
+                        </h3>
+                        <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
+                          {work.desc}
+                        </p>
+                        <motion.div
+                          className="flex items-center gap-3 text-foreground font-black text-xl"
+                          whileHover={{ x: 5 }}
+                        >
+                          <span>VIEW PROJECT</span>
+                          <span>→</span>
+                        </motion.div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </Card>
+            ))}
+          </CardSwap>
+          </div>
         </div>
 
         {/* View all CTA */}
@@ -377,7 +471,7 @@ function FeaturedWork() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mt-40"
+          className="text-center"
         >
           <motion.a
             href="/projects"
@@ -386,6 +480,141 @@ function FeaturedWork() {
             className="inline-block px-16 py-6 border-4 border-foreground text-foreground text-2xl font-black rounded-full hover:bg-foreground hover:text-background transition-all"
           >
             ALL PROJECTS
+          </motion.a>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function SkillsSection() {
+  const skills = [
+    {
+      category: "Full-Stack Development",
+      icon: "💻",
+      capabilities: [
+        "React, Next.js & Modern Frontend",
+        "Python & Java Backend Systems",
+        "RESTful APIs & Database Design"
+      ]
+    },
+    {
+      category: "UI/UX Design",
+      icon: "🎨",
+      capabilities: [
+        "Responsive Web Design",
+        "Figma & Design Systems",
+        "Animation & Micro-interactions"
+      ]
+    },
+    {
+      category: "Problem Solving",
+      icon: "🧩",
+      capabilities: [
+        "Algorithm Design & Optimization",
+        "Debugging & Performance Tuning",
+        "System Architecture Planning"
+      ]
+    },
+    {
+      category: "Tools & Technologies",
+      icon: "⚡",
+      capabilities: [
+        "Git Version Control",
+        "AWS & Cloud Platforms",
+        "Docker & Deployment Pipelines"
+      ]
+    }
+  ];
+
+  return (
+    <section className="relative py-40 px-6 overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent" />
+      
+      <div className="relative max-w-7xl mx-auto">
+        
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="mb-24"
+        >
+          <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.85] mb-8">
+            <span className="block text-foreground">WHAT I</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">BRING</span>
+          </h2>
+          <div className="flex items-center gap-8">
+            <div className="h-1 w-32 bg-foreground" />
+            <p className="text-xl text-muted-foreground">Skills that drive results</p>
+          </div>
+        </motion.div>
+
+        {/* Skills grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {skills.map((skill, i) => (
+            <motion.div
+              key={skill.category}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5 }}
+              className="group relative p-8 rounded-2xl border-2 border-border hover:border-foreground transition-all duration-300 bg-background/50 backdrop-blur-sm"
+            >
+              {/* Icon */}
+              <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">
+                {skill.icon}
+              </div>
+
+              {/* Category */}
+              <h3 className="text-2xl md:text-3xl font-black text-foreground mb-6 leading-tight">
+                {skill.category}
+              </h3>
+
+              {/* Capabilities list */}
+              <ul className="space-y-3">
+                {skill.capabilities.map((capability, idx) => (
+                  <motion.li
+                    key={idx}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.1 + idx * 0.1 }}
+                    viewport={{ once: true }}
+                    className="flex items-start gap-3 text-muted-foreground"
+                  >
+                    <span className="text-blue-500 mt-1">→</span>
+                    <span className="text-lg">{capability}</span>
+                  </motion.li>
+                ))}
+              </ul>
+
+              {/* Hover gradient effect */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="text-center mt-20"
+        >
+          <p className="text-xl text-muted-foreground mb-8">
+            Want to see these skills in action?
+          </p>
+          <motion.a
+            href="/projects"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-block px-12 py-5 border-2 border-foreground text-foreground text-lg font-black rounded-full hover:bg-foreground hover:text-background transition-all"
+          >
+            VIEW ALL PROJECTS
           </motion.a>
         </motion.div>
       </div>
@@ -540,6 +769,7 @@ export default function HomePage() {
       <HeroSection />
       <MarqueeSection />
       <FeaturedWork />
+      <SkillsSection />
       <BlogTeaser />
       <ContactCTA />
     </div>

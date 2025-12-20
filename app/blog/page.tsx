@@ -13,6 +13,7 @@ const blogs = [
     date: 'Jul 23, 2025',
     image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80',
     tags: ['hackathon', 'fintech', 'python', 'react'],
+    url: 'https://dev.to/zenoguy/my-first-hackathon-24-hours-1-fintech-app-0-sleepspoiler-we-won-a-special-mention-too--3pho'
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const blogs = [
     date: 'Jun 26, 2025',
     image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1200&q=80',
     tags: ['java', 'mysql', 'networking', 'devlog'],
+    url: 'https://dev.to/zenoguy/i-made-a-java-chat-app-in-one-night-because-i-had-no-projects-bo8'
   },
   {
     id: 3,
@@ -33,6 +35,7 @@ const blogs = [
     date: 'Jun 18, 2025',
     image: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=1200&q=80',
     tags: ['vim', 'beginners', 'cli', 'programming'],
+    url: 'https://dev.to/zenoguy/so-i-decided-to-learn-vim-and-i-kinda-get-the-hype-now-287d'
   },
   {
     id: 4,
@@ -43,6 +46,7 @@ const blogs = [
     date: 'Jun 16, 2025',
     image: 'https://images.unsplash.com/photo-1621768216002-5ac171876625?w=1200&q=80',
     tags: ['apple', 'devtool', 'linux', 'ai'],
+    url: 'https://dev.to/zenoguy/apple-just-buffed-dev-tools-4bcn'
   },
   {
     id: 5,
@@ -53,6 +57,7 @@ const blogs = [
     date: 'Jun 09, 2025',
     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80',
     tags: ['python', 'pygame', 'gamedev', 'tutorial'],
+    url: 'https://dev.to/zenoguy/i-made-a-space-shooter-in-python-and-it-works-kinda-kpg'
   },
   {
     id: 6,
@@ -63,6 +68,7 @@ const blogs = [
     date: 'Jun 04, 2025',
     image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=1200&q=80',
     tags: ['functional', 'elixir', 'haskell', 'programming'],
+    url: 'https://dev.to/zenoguy/functional-programming-from-code-chaos-to-mathematical-zen-1-4p8m'
   },
 ];
 
@@ -80,7 +86,7 @@ function FeaturedArticle({ blog }: { blog: typeof blogs[0] }) {
   const scale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [1.2, 1, 1, 1.2]);
 
   const handleClick = () => {
-    window.open('https://dev.to/zenoguy', '_blank');
+    window.open(blog.url, '_blank');
   };
 
   return (
@@ -191,7 +197,7 @@ function ArticleCard({ blog, index }: { blog: typeof blogs[0]; index: number }) 
   const rotate = useTransform(scrollYProgress, [0, 0.5, 1], [-2, 0, 2]);
 
   const handleClick = () => {
-    window.open('https://dev.to/zenoguy', '_blank');
+    window.open(blog.url, '_blank');
   };
 
   return (
@@ -287,7 +293,8 @@ function Hero() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
-          className="text-7xl md:text-9xl lg:text-[12rem] font-black leading-[0.85] mb-8"
+          className="mt-6 text-6xl md:text-8xl lg:text-9xl font-bold text-foreground leading-none"
+
         >
           <span className="block text-foreground">BLOG</span>
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500">
@@ -300,7 +307,7 @@ function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto font-light"
+          className="mt-8 text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto font-light"
         >
           Code experiments, late-night builds, and lessons learned from breaking things in production
         </motion.p>
