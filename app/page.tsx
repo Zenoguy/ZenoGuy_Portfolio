@@ -551,7 +551,7 @@ function SkillsSection() {
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
       color: '#4F46E5',
       github: 'https://github.com/Zenoguy/SpendSight_',
-      live: 'https://spendsight.netlify.app/'
+      live: null
     },
     {
       id: 2,
@@ -562,7 +562,7 @@ function SkillsSection() {
       image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
       color: '#EC4899',
       github: 'https://github.com/Zenoguy/data_wiping_linux',
-      live: 'https://e2-x-fontend-paql.vercel.app/'
+      live: null
     },
     {
       id: 3,

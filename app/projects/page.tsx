@@ -14,7 +14,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80',
     color: '#4F46E5',
     github: 'https://github.com/Zenoguy/SpendSight_',
-    live: 'https://spendsight.netlify.app/'
+    live: ''
   },
   {
     id: 2,
@@ -26,7 +26,7 @@ const projects = [
     image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80',
     color: '#EC4899',
     github: 'https://github.com/Zenoguy/data_wiping_linux',
-    live: 'https://e2-x-fontend-paql.vercel.app/' // Add your live demo link here
+    live: '' // Add your live demo link here
   },
   {
     id: 3,
