@@ -8,7 +8,7 @@ const projects = [
     id: 1,
     title: 'SpendSight',
     category: 'FinTech AI Pipeline',
-    year: '2024',
+    year: '2025',
     description: 'Hybrid AI pipeline that parses financial PDFs, classifies transactions through Regex → MiniLM → LLM stages, and generates RAG-powered insights with multi-bank support.',
     services: ['AI/ML', 'OCR', 'RAG', 'Database'],
     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1920&q=80',
@@ -20,7 +20,7 @@ const projects = [
     id: 2,
     title: 'Data Wiper',
     category: 'Security Toolkit',
-    year: '2024',
+    year: '2025',
     description: 'Enterprise-grade secure drive sanitization with zero-fill and AES-128 encryption wipes. Features partition backup, verification system, and compliance certificates.',
     services: ['Linux', 'Cryptography', 'Security'],
     image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1920&q=80',
@@ -32,7 +32,7 @@ const projects = [
     id: 3,
     title: 'Leaf Disease Segmenter',
     category: 'Computer Vision Research',
-    year: '2024',
+    year: '2025',
     description: 'Hierarchical panoptic segmentation using ConvNeXt-Tiny for plant health monitoring. Dual-headed architecture with custom loss functions achieving 0.72 F1 score.',
     services: ['PyTorch', 'CNN', 'Research'],
     image: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1920&q=80',
@@ -44,7 +44,7 @@ const projects = [
     id: 4,
     title: 'ChatApp',
     category: 'Desktop Messaging',
-    year: '2024',
+    year: '2025',
     description: 'Real-time chat application built with Java Swing, Sockets, and MySQL. Features message persistence, modern GUI, and timestamped messaging with custom UI.',
     services: ['Java', 'Sockets', 'MySQL'],
     image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=1920&q=80',
@@ -56,7 +56,7 @@ const projects = [
     id: 5,
     title: 'Space Shooters',
     category: 'Arcade Game',
-    year: '2024',
+    year: '2025',
     description: 'Classic arcade-style space shooter with Pygame featuring multiple enemy types, progressive difficulty, power-ups, health system, and full audio integration.',
     services: ['Python', 'Pygame', 'Game Dev'],
     image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1920&q=80',
@@ -235,7 +235,7 @@ function Hero() {
           className="mb-6"
         >
           <span className="text-sm md:text-base text-neutral-500 dark:text-neutral-400 uppercase tracking-[0.3em]">
-            Portfolio 2024
+            Projects 2k25
           </span>
         </motion.div>
 
