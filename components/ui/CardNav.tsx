@@ -1,9 +1,36 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ArrowUpRight, Sun, Moon } from "lucide-react";
 import { useTheme } from "next-themes";
+
+interface Link {
+  label: string;
+  ariaLabel: string;
+  href: string;
+}
+
+interface NavItem {
+  label: string;
+  bgColor: string;
+  textColor: string;
+  links?: Link[];
+}
+
+interface CardNavProps {
+  logo?: string;
+  logoDark?: string;
+  logoLight?: string;
+  logoAlt?: string;
+  items: NavItem[];
+  className?: string;
+  ease?: string;
+  baseColor?: string;
+  menuColor?: string;
+  buttonBgColor?: string;
+  buttonTextColor?: string;
+}
 
 const CardNav = ({
   logo,
@@ -17,20 +44,23 @@ const CardNav = ({
   menuColor = "#ffffff",
   buttonBgColor = "#ffffff",
   buttonTextColor = "#0b0616",
-}) => {
+}: CardNavProps) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const navRef = useRef(null);
-  const cardsRef = useRef([]);
-  const tlRef = useRef(null);
-  const { theme, setTheme } = useTheme();
+  const navRef = useRef<HTMLElement>(null);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useLayoutEffect(() => {
+  // Use useEffect instead of useLayoutEffect to avoid hydration mismatch
+  useEffect(() => {
     setMounted(true);
   }, []);
 
-  const isDark = mounted ? theme === 'dark' : true;
+  // Better theme detection - use resolvedTheme which accounts for system preference
+  const currentTheme = mounted ? (resolvedTheme || theme) : 'dark';
+  const isDark = currentTheme === 'dark';
 
   // Determine which logo to use
   const currentLogo = logoDark && logoLight 
@@ -43,7 +73,7 @@ const CardNav = ({
 
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
     if (isMobile) {
-      const contentEl = navEl.querySelector(".card-nav-content");
+      const contentEl = navEl.querySelector(".card-nav-content") as HTMLElement;
       if (contentEl) return 60 + contentEl.scrollHeight + 12;
     }
     return 220;
@@ -75,7 +105,9 @@ const CardNav = ({
 
   useLayoutEffect(() => {
     tlRef.current = createTimeline();
-    return () => tlRef.current?.kill();
+    return () => {
+      tlRef.current?.kill();
+    };
   }, [ease, items]);
 
   useLayoutEffect(() => {
@@ -103,9 +135,40 @@ const CardNav = ({
     }
   };
 
-  const setCardRef = (i) => (el) => {
+  const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
     if (el) cardsRef.current[i] = el;
   };
+
+  // Don't render until mounted to prevent flash
+  if (!mounted) {
+    return (
+      <div className={`fixed left-1/2 -translate-x-1/2 top-[1.2em] w-[92%] max-w-[820px] z-[9999] ${className}`}>
+        <nav
+          className="rounded-xl shadow-lg relative overflow-hidden backdrop-blur-xl border h-[60px] bg-white/10 border-white/20"
+          style={{ 
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+          }}
+        >
+          <div className="absolute inset-x-0 top-0 h-[60px] flex items-center justify-between px-4">
+            <div className="flex flex-col gap-[6px]">
+              <span className="w-6 h-[2px] bg-white" style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.3)' }} />
+              <span className="w-6 h-[2px] bg-white" style={{ boxShadow: '0 2px 8px rgba(255,255,255,0.3)' }} />
+            </div>
+            <img 
+              src={logoDark || logo} 
+              alt={logoAlt} 
+              className="h-[75px] drop-shadow-lg" 
+              style={{ filter: 'drop-shadow(0 0 10px rgba(255,255,255,0.3))' }}
+            />
+            <div className="w-9 h-9 flex items-center justify-center rounded-md bg-white/10 border border-white/20">
+              <Sun size={18} className="text-white" />
+            </div>
+          </div>
+        </nav>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -187,7 +250,7 @@ const CardNav = ({
             }}
             aria-label="Toggle theme"
           >
-            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+            {isDark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
         </div>

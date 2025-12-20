@@ -42,9 +42,6 @@ export default function ClientLayout({
         </div>
       )}
 
-      {/* ================= CONTENT ================= */}
-      <div className="relative z-10">{children}</div>
-
       {/* ================= INTRO OVERLAY (NON-BLOCKING) ================= */}
       <AnimatePresence>
         {showIntro && (
@@ -52,10 +49,13 @@ export default function ClientLayout({
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
-            className="fixed inset-0 z-20 pointer-events-none bg-black/40 backdrop-blur-sm"
+            className="fixed inset-0 z-10 pointer-events-none bg-black/40 backdrop-blur-sm"
           />
         )}
       </AnimatePresence>
+
+      {/* ================= CONTENT ================= */}
+      <div className="relative z-20">{children}</div>
     </div>
   );
 }

@@ -11,15 +11,19 @@ import logoDark from "@/public/images/logo2_dark.png";
 
 export default function Navigation() {
   const router = useRouter();
-  const { theme, resolvedTheme } = useTheme();
+  const { theme, resolvedTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Default to dark theme on server/initial render, then use actual theme after mount
-  const currentTheme = mounted ? (resolvedTheme || theme) : 'dark';
+  // Get the actual theme that should be displayed
+  // Priority: resolvedTheme > theme > systemTheme > 'dark' (fallback)
+  const currentTheme = mounted 
+    ? (resolvedTheme || theme || systemTheme || 'dark')
+    : 'dark'; // Always default to dark on SSR
+  
   const isDark = currentTheme === 'dark';
 
   const items = [
@@ -87,6 +91,7 @@ export default function Navigation() {
 
   return (
     <CardNav
+      key={currentTheme} // Force re-render when theme changes
       logoLight={logoLight.src}
       logoDark={logoDark.src}
       logoAlt="Zenoguy Logo"

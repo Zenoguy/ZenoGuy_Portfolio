@@ -117,11 +117,11 @@ function HeroSection() {
           }} />
         </motion.div>
 
-        <div className="relative z-10 w-full max-w-[1800px] mx-auto px-6 md:px-12">
+        <div className="relative z-10 w-full max-w-[1800px] mx-auto px-6 md:px-8 lg:px-12 xl:px-16">
           <div className="relative">
             
-            {/* Floating image - centered and smaller */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] z-10">
+            {/* Floating image - responsive sizing */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[360px] lg:h-[360px] xl:w-[400px] xl:h-[400px] z-10">
               <motion.div
                 style={{ 
                   scale: imageScale,
@@ -153,7 +153,7 @@ function HeroSection() {
                       repeat: Infinity,
                       ease: "easeOut"
                     }}
-                    className="absolute inset-0 w-[400px] h-[400px] rounded-full border-2 border-blue-500/30 blur-sm"
+                    className="absolute inset-0 w-full h-full rounded-full border-2 border-blue-500/30 blur-sm"
                     style={{ margin: '-2px' }}
                   />
                   
@@ -168,21 +168,6 @@ function HeroSection() {
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-purple-500/20 mix-blend-overlay" />
                   </div>
-
-                  {/* Orbiting element */}
-                  <motion.div
-                    animate={{
-                      rotate: 360,
-                    }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                    className="absolute inset-0"
-                  >
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full blur-xl" />
-                  </motion.div>
                 </motion.div>
               </motion.div>
             </div>
@@ -195,21 +180,21 @@ function HeroSection() {
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1 }}
-                className="mb-8"
+                className="mb-6 md:mb-8"
               >
-                <span className="inline-block px-6 py-2 border-2 border-foreground text-foreground text-xs uppercase tracking-[0.5em] font-black rounded-full">
+                <span className="inline-block px-4 py-2 md:px-6 md:py-2 border-2 border-foreground text-foreground text-[10px] md:text-xs uppercase tracking-[0.3em] md:tracking-[0.5em] font-black rounded-full">
                   Developer / Designer
                 </span>
               </motion.div>
 
-              {/* Massive headline */}
+              {/* Massive headline - responsive text sizes */}
               <motion.h1
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.2 }}
                 className="relative"
               >
-                <div className="text-7xl md:text-8xl lg:text-9xl font-black leading-[0.8] tracking-tighter">
+                <div className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-[0.8] tracking-tighter">
                   <div className="text-foreground">I BUILD</div>
                   <div className="relative inline-block">
                     <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-gradient">
@@ -225,9 +210,9 @@ function HeroSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.6 }}
-                className="mt-12 max-w-2xl"
+                className="mt-8 md:mt-12 max-w-xl lg:max-w-2xl"
               >
-                <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed">
+                <p className="text-base md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed">
                   Turning caffeine and keystrokes into digital experiences that actually work. Mostly.
                 </p>
               </motion.div>
@@ -237,13 +222,13 @@ function HeroSection() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.8 }}
-                className="flex flex-wrap gap-6 mt-12"
+                className="flex flex-wrap gap-4 md:gap-6 mt-8 md:mt-12"
               >
                 <motion.a
                   href="/projects"
                   whileHover={{ scale: 1.05, x: 10 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group px-10 py-5 bg-foreground text-background text-lg font-black rounded-full flex items-center gap-3"
+                  className="group px-8 py-4 md:px-10 md:py-5 bg-foreground text-background text-base md:text-lg font-black rounded-full flex items-center gap-3"
                   onHoverStart={() => setCursorVariant('hover')}
                   onHoverEnd={() => setCursorVariant('default')}
                 >
@@ -260,7 +245,7 @@ function HeroSection() {
                   href="#about"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-10 py-5 border-2 border-foreground text-foreground text-lg font-black rounded-full"
+                  className="px-8 py-4 md:px-10 md:py-5 border-2 border-foreground text-foreground text-base md:text-lg font-black rounded-full"
                   onHoverStart={() => setCursorVariant('hover')}
                   onHoverEnd={() => setCursorVariant('default')}
                 >
@@ -276,7 +261,7 @@ function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
-          className="absolute bottom-12 left-12 text-muted-foreground"
+          className="absolute bottom-8 left-6 md:bottom-12 md:left-12 text-muted-foreground"
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
@@ -286,7 +271,7 @@ function HeroSection() {
             <span className="text-xs uppercase tracking-widest rotate-180" style={{ writingMode: 'vertical-rl' }}>
               Scroll to explore
             </span>
-            <div className="w-px h-20 bg-gradient-to-b from-muted-foreground to-transparent" />
+            <div className="w-px h-16 md:h-20 bg-gradient-to-b from-muted-foreground to-transparent" />
           </motion.div>
         </motion.div>
       </div>
@@ -343,125 +328,119 @@ function FeaturedWork() {
       link: "https://github.com/Zenoguy/Panoptic_Segmentation"
     },
   ];
+
   return (
-    <section ref={sectionRef} className="relative py-40 px-6">
-      <div className="max-w-7xl mx-auto">
+    <section ref={sectionRef} className="relative py-24 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8 overflow-hidden">
+      <div className="max-w-[1600px] mx-auto">
         
         {/* Section layout - side by side */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-16 items-start mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 xl:gap-20 items-start mb-20 md:mb-28 lg:mb-32">
           
           {/* Left: Section header */}
-<motion.div
-  initial={{ opacity: 0, y: 40 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 1.2, ease: "easeOut" }}
-  viewport={{ once: true }}
-  className="
-    pt-10
-    lg:col-span-2
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            viewport={{ once: true }}
+            className="
+              pt-6 lg:pt-10
+              lg:col-span-2
+              max-w-none
+              lg:pr-8
+            "
+          >
+            <h2 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[0.8] tracking-tighter mb-6 md:mb-8">
+              <span className="block text-foreground">FEATURED</span>
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+                WORK
+              </span>
+            </h2>
 
-    /* BREAK OUT OF GRID */
-    lg:ml-[-8vw]
-    xl:ml-[-10vw]
+            <div className="flex items-center gap-6 md:gap-8 mb-6 md:mb-8">
+              <div className="h-1 w-20 md:w-32 bg-foreground" />
+              <p className="text-lg md:text-xl text-muted-foreground max-w-xl">
+                Systems forged under constraints, not concepts
+              </p>
+            </div>
 
-    /* Allow big text to breathe */
-    max-w-none
-  "
->
-  <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.8] tracking-tighter mb-8">
-    <span className="block text-foreground">FEATURED</span>
-    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-      WORK
-    </span>
-  </h2>
+            <p className="text-base md:text-lg text-muted-foreground leading-relaxed mb-4 md:mb-6 max-w-xl">
+              A selection of backend-heavy products where architecture, performance,
+              and trade-offs mattered more than surface polish.
+            </p>
 
-  <div className="flex items-center gap-8 mb-8">
-    <div className="h-1 w-32 bg-foreground" />
-    <p className="text-xl text-muted-foreground max-w-xl">
-      Systems forged under constraints, not concepts
-    </p>
-  </div>
-
-  <p className="text-lg text-muted-foreground leading-relaxed mb-6 max-w-xl">
-    A selection of backend-heavy products where architecture, performance,
-    and trade-offs mattered more than surface polish.
-  </p>
-
-  <p className="text-base text-muted-foreground/70 leading-relaxed max-w-lg">
-    Built to scale, fail gracefully, and survive real users, deadlines,
-    and production traffic.
-  </p>
-</motion.div>
-
+            <p className="text-sm md:text-base text-muted-foreground/70 leading-relaxed max-w-lg">
+              Built to scale, fail gracefully, and survive real users, deadlines,
+              and production traffic.
+            </p>
+          </motion.div>
 
           {/* Right: CardSwap container */}
           <div
             className="
               relative 
-              h-[700px] 
+              h-[600px] md:h-[650px] lg:h-[700px]
               lg:col-span-3
-              lg:translate-x-24
-              xl:translate-x-32
+              w-full
+              lg:pl-4 xl:pl-8
             "
           >
-
-          <CardSwap
-            cardDistance={40}
-            verticalDistance={50}
-            delay={3000}
-            pauseOnHover={true}
-          >
-            {works.map((work, i) => (
-              <Card key={work.title}>
-                <a
-                  href="/projects"
-                  className="group block h-full"
-                >
-                  <div className="relative h-full rounded-3xl overflow-hidden border-2 border-border hover:border-foreground transition-all duration-300 bg-background shadow-2xl">
-                    
-                    {/* Background image */}
-                    <div className="absolute inset-0">
-                      <div 
-                        className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                        style={{ backgroundImage: `url(${work.image})` }}
-                      />
-                      <div className={`absolute inset-0 bg-gradient-to-br ${work.color} opacity-30 group-hover:opacity-40 transition-opacity`} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="relative h-full p-12 flex flex-col justify-end">
+            <CardSwap
+              cardDistance={40}
+              verticalDistance={50}
+              delay={3000}
+              pauseOnHover={true}
+            >
+              {works.map((work, i) => (
+                <Card key={work.title}>
+                  <a
+                    href="/projects"
+                    className="group block h-full"
+                  >
+                    <div className="relative h-full rounded-2xl lg:rounded-3xl overflow-hidden border-2 border-border hover:border-foreground transition-all duration-300 bg-background shadow-2xl">
                       
-                      {/* Floating number */}
-                      <div className="absolute top-8 right-8 text-foreground/10 text-9xl font-black leading-none">
-                        {String(i + 1).padStart(2, '0')}
+                      {/* Background image */}
+                      <div className="absolute inset-0">
+                        <div 
+                          className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
+                          style={{ backgroundImage: `url(${work.image})` }}
+                        />
+                        <div className={`absolute inset-0 bg-gradient-to-br ${work.color} opacity-30 group-hover:opacity-40 transition-opacity`} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
                       </div>
 
-                      {/* Text content */}
-                      <div>
-                        <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground font-bold mb-4">
-                          {work.subtitle}
+                      {/* Content */}
+                      <div className="relative h-full p-6 md:p-8 lg:p-10 xl:p-12 flex flex-col justify-end">
+                        
+                        {/* Floating number */}
+                        <div className="absolute top-4 right-4 md:top-6 md:right-6 lg:top-8 lg:right-8 text-foreground/10 text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-none">
+                          {String(i + 1).padStart(2, '0')}
                         </div>
-                        <h3 className="text-5xl md:text-6xl font-black text-foreground mb-6 leading-none">
-                          {work.title}
-                        </h3>
-                        <p className="text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
-                          {work.desc}
-                        </p>
-                        <motion.div
-                          className="flex items-center gap-3 text-foreground font-black text-xl"
-                          whileHover={{ x: 5 }}
-                        >
-                          <span>VIEW PROJECT</span>
-                          <span>→</span>
-                        </motion.div>
+
+                        {/* Text content */}
+                        <div>
+                          <div className="text-[10px] md:text-xs uppercase tracking-[0.2em] md:tracking-[0.3em] text-muted-foreground font-bold mb-3 md:mb-4">
+                            {work.subtitle}
+                          </div>
+                          <h3 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-foreground mb-4 md:mb-6 leading-none">
+                            {work.title}
+                          </h3>
+                          <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-6 md:mb-8 leading-relaxed max-w-2xl">
+                            {work.desc}
+                          </p>
+                          <motion.div
+                            className="flex items-center gap-2 md:gap-3 text-foreground font-black text-lg md:text-xl"
+                            whileHover={{ x: 5 }}
+                          >
+                            <span>VIEW PROJECT</span>
+                            <span>→</span>
+                          </motion.div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </a>
-              </Card>
-            ))}
-          </CardSwap>
+                  </a>
+                </Card>
+              ))}
+            </CardSwap>
           </div>
         </div>
 
@@ -477,7 +456,7 @@ function FeaturedWork() {
             href="/projects"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-block px-16 py-6 border-4 border-foreground text-foreground text-2xl font-black rounded-full hover:bg-foreground hover:text-background transition-all"
+            className="inline-block px-10 py-4 md:px-14 md:py-5 lg:px-16 lg:py-6 border-3 md:border-4 border-foreground text-foreground text-lg md:text-xl lg:text-2xl font-black rounded-full hover:bg-foreground hover:text-background transition-all"
           >
             ALL PROJECTS
           </motion.a>
@@ -622,7 +601,6 @@ function SkillsSection() {
 
   return (
     <section className="relative py-40 px-6 overflow-hidden">
-      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.1),transparent_50%)]" />*/}
       
       <div className="relative max-w-7xl mx-auto">
         
@@ -641,7 +619,7 @@ function SkillsSection() {
           <div className="flex items-center gap-8">
             <div className="h-1 w-32 bg-foreground" />
             <p className="text-xl text-muted-foreground">
-              {activeSkill ? `Showing projects using ${activeSkill.category}` : 'Hover over skills to see related projects'}
+              {activeSkill ? `Showing projects using ${activeSkill.category}` : 'Click on skills to see related projects'}
             </p>
           </div>
         </motion.div>
@@ -658,13 +636,11 @@ function SkillsSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 viewport={{ once: true }}
-                onHoverStart={() => setActiveSkill(skill)}
-                onHoverEnd={() => setActiveSkill(null)}
                 onClick={() => setActiveSkill(activeSkill?.id === skill.id ? null : skill)}
                 className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                   activeSkill?.id === skill.id
                     ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-border hover:border-blue-500/50 bg-card'
+                    : 'border-border hover:border-blue-500/30 bg-card'
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -674,12 +650,16 @@ function SkillsSection() {
                       alt={skill.category}
                       className="w-full h-full transition-all duration-300"
                       style={{ 
-                        filter: 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
+                        filter: activeSkill?.id === skill.id 
+                          ? 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
+                          : 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
                       }}
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-blue-400 transition-colors">
+                    <h3 className={`text-xl font-bold mb-2 transition-colors ${
+                      activeSkill?.id === skill.id ? 'text-blue-400' : 'text-foreground'
+                    }`}>
                       {skill.category}
                     </h3>
                     <div className="flex flex-wrap gap-2 mb-3">
@@ -704,7 +684,7 @@ function SkillsSection() {
                 {activeSkill?.id === skill.id && (
                   <motion.div
                     layoutId="activeSkill"
-                    className="absolute inset-0 border-2 border-blue-500 rounded-2xl"
+                    className="absolute inset-0 border-2 border-blue-500 rounded-2xl pointer-events-none"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -824,6 +804,7 @@ function SkillsSection() {
     </section>
   );
 }
+
 function BlogTeaser() {
   return (
     <section className="relative py-40 px-6 overflow-hidden">
