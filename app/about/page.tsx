@@ -11,7 +11,7 @@ export default function AboutPage() {
       <Statement />
       <Systems />
       <Philosophy />
-      <Human />
+      <HobbiesSection />
       <CTA />
     </main>
   );
@@ -58,7 +58,7 @@ function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="text-7xl md:text-9xl lg:text-[12rem] font-black leading-[0.9] tracking-tight"
+          className="mt-6 text-6xl md:text-8xl lg:text-9xl font-bold text-foreground leading-none"
         >
           <span className="block">I BUILD</span>
           <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-500 to-pink-500">
@@ -268,16 +268,33 @@ function Philosophy() {
 /* ------------------------------------------------------------------ */
 /* HUMAN / HOBBIES                                                     */
 /* ------------------------------------------------------------------ */
-function Human() {
+
+export  function HobbiesSection() {
   const hobbies = [
-    { icon: Dumbbell, label: "Gym Training", desc: "Consistency and strength" },
-    { icon: Activity, label: "Football", desc: "Teamwork and spatial awareness" },
-    { icon: Waves, label: "Swimming", desc: "Control and breathing" },
-    { icon: Music, label: "Music", desc: "Background for deep work" },
+    { 
+      icon: "/images/gym.svg", 
+      label: "Gym Training", 
+      desc: "Consistency and strength" 
+    },
+    { 
+      icon: "/images/football-svgrepo-com.svg", 
+      label: "Football", 
+      desc: "Teamwork and spatial awareness" 
+    },
+    { 
+      icon: "/images/swimming-svgrepo-com.svg", 
+      label: "Swimming", 
+      desc: "Control and breathing" 
+    },
+    { 
+      icon: "/images/anime-and-manga-svgrepo-com.svg", 
+      label: "Anime", 
+      desc: "Stories and art that inspire" 
+    },
   ];
 
   return (
-    <section className="relative py-40 px-6 lg:px-24">
+    <section className="relative py-40 px-6 lg:px-24 bg-gradient-to-b from-background via-slate-950/20 to-background">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -286,65 +303,89 @@ function Human() {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <span className="inline-block text-xs tracking-[0.3em] text-primary font-semibold mb-6 px-4 py-2 rounded-full border border-primary/20 bg-primary/5">
+          <span className="inline-block text-xs tracking-[0.3em] text-blue-500 font-semibold mb-6 px-4 py-2 rounded-full border border-blue-500/20 bg-blue-500/5">
             OUTSIDE CODE
           </span>
 
-          <h3 className="text-5xl md:text-7xl font-black mb-8 leading-tight">
+          <h3 className="text-5xl md:text-7xl font-black mb-8 leading-tight text-white">
             I stay human
           </h3>
 
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-slate-400 max-w-3xl leading-relaxed font-light">
             Good systems are built by people who understand{" "}
-            <span className="text-foreground font-medium">rhythm</span>,{" "}
-            <span className="text-foreground font-medium">recovery</span>, and{" "}
-            <span className="text-foreground font-medium">discipline</span>.
+            <span className="text-white font-medium">rhythm</span>,{" "}
+            <span className="text-white font-medium">recovery</span>, and{" "}
+            <span className="text-white font-medium">discipline</span>.
             <br />
             Outside of work, I invest in things that sharpen focus and endurance.
           </p>
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {hobbies.map((hobby, index) => {
-            const Icon = hobby.icon;
-            return (
+          {hobbies.map((hobby, index) => (
+            <motion.div
+              key={hobby.label}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -12, transition: { duration: 0.2 } }}
+              className="group relative p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 bg-slate-900/30 backdrop-blur-sm transition-all duration-300 text-center overflow-hidden"
+            >
+              {/* Animated gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-500/0 via-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Glow effect */}
               <motion.div
-                key={hobby.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -12, transition: { duration: 0.2 } }}
-                className="group relative p-8 rounded-2xl border border-border hover:border-primary/50 bg-card/30 backdrop-blur-sm transition-all duration-300 text-center"
-              >
-                <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-300" />
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: 'radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15), transparent 70%)'
+                }}
+              />
+              
+              <div className="relative">
+                <motion.div
+                  className="inline-flex p-6 rounded-2xl bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors mb-6"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: [0, -5, 5, -5, 0],
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <img 
+                    src={hobby.icon} 
+                    alt={hobby.label}
+                    className="w-12 h-12 transition-all duration-300"
+                    style={{ 
+                      filter: 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
+                    }}
+                  />
+                </motion.div>
                 
-                <div className="relative">
-                  <motion.div
-                    className="inline-flex p-6 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors mb-6"
-                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <Icon className="w-8 h-8 text-primary" />
-                  </motion.div>
-                  
-                  <h4 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                    {hobby.label}
-                  </h4>
-                  
-                  <p className="text-sm text-muted-foreground">
-                    {hobby.desc}
-                  </p>
-                </div>
-              </motion.div>
-            );
-          })}
+                <h4 className="text-xl font-bold mb-2 text-white group-hover:text-blue-400 transition-colors">
+                  {hobby.label}
+                </h4>
+                
+                <p className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
+                  {hobby.desc}
+                </p>
+              </div>
+
+              {/* Bottom accent line */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 0 }}
+                whileHover={{ scaleX: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
-
 /* ------------------------------------------------------------------ */
 /* CTA                                                                */
 /* ------------------------------------------------------------------ */
