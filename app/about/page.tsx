@@ -8,6 +8,7 @@ export default function AboutPage() {
   return (
     <main className="relative">
       <Hero />
+      <Statement />
       <Systems />
       <Philosophy />
       <Human />
@@ -74,6 +75,44 @@ function Hero() {
           Backend engineer obsessed with reliability, performance, and clarity.
           <br />
           <span className="text-foreground font-medium">Systems are everything.</span>
+        </motion.p>
+      </motion.div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* STATEMENT                                                           */
+/* ------------------------------------------------------------------ */
+function Statement() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
+  const smoothY = useSpring(y, { stiffness: 100, damping: 30 });
+
+  return (
+    <section ref={ref} className="relative py-32 px-6 overflow-hidden">
+      <motion.div
+        style={{ y: smoothY }}
+        className="max-w-5xl mx-auto text-center"
+      >
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight"
+        >
+          I write code that{" "}
+          <span className="italic text-primary">actually runs in production</span>
+          <br />
+          <span className="text-muted-foreground font-light">
+            (not just on my laptop)
+          </span>
         </motion.p>
       </motion.div>
     </section>

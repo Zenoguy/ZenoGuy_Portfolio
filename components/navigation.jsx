@@ -14,12 +14,11 @@ export default function Navigation() {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Wait until mounted to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Determine current theme
+  // Default to dark theme on server/initial render, then use actual theme after mount
   const currentTheme = mounted ? (resolvedTheme || theme) : 'dark';
   const isDark = currentTheme === 'dark';
 
@@ -85,13 +84,6 @@ export default function Navigation() {
       ],
     },
   ];
-
-  // Don't render until mounted to prevent hydration mismatch
-  if (!mounted) {
-    return (
-      <div className="h-16 w-full bg-transparent" />
-    );
-  }
 
   return (
     <CardNav
