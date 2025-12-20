@@ -1,7 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
-import { AnimatePresence } from "framer-motion";
-import LoadingScreen from "@/components/loading-screen";
+
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Orb from "@/components/ui/Orb";
 
 export default function ClientLayout({
@@ -9,62 +9,53 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
+  const [mountOrb, setMountOrb] = useState(false);
 
   useEffect(() => {
-    setIsHydrated(true);
-    const minLoadingTime = 2000;
-    const startTime = Date.now();
+    // Let the browser paint FIRST
+    requestAnimationFrame(() => {
+      setMountOrb(true);
+    });
 
-    const checkLoadingComplete = () => {
-      const elapsedTime = Date.now() - startTime;
-      if (elapsedTime >= minLoadingTime && document.readyState === "complete") {
-        setIsLoading(false);
-      } else {
-        setTimeout(checkLoadingComplete, 100);
-      }
-    };
+    // Fade intro quickly (does NOT block content)
+    const t = setTimeout(() => {
+      setShowIntro(false);
+    }, 600);
 
-    if (document.readyState === "complete") {
-      checkLoadingComplete();
-    } else {
-      window.addEventListener("load", checkLoadingComplete);
-      return () => window.removeEventListener("load", checkLoadingComplete);
-    }
+    return () => clearTimeout(t);
   }, []);
 
-  if (!isHydrated) return null;
-
   return (
-    <div className="relative min-h-screen">
-      {/* ================= ORB (INTERACTIVE BACKGROUND) ================= */}
-      <div className="fixed inset-0 z-0 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[6000px]">
-          <Orb
-            hoverIntensity={0.9}
-            rotateOnHover
-            hue={0}
-            forceHoverState={false}
-          />
-        </div>
-      </div>
-
-      {/* ================= CONTENT LAYER ================= */}
-      <div className="relative z-10">
-        <AnimatePresence mode="wait">
-          {isLoading && (
-            <LoadingScreen
-              key="loading"
-              onLoadingComplete={() => setIsLoading(false)}
+    <div className="relative min-h-screen overflow-hidden">
+      {/* ================= ORB (POST-PAINT) ================= */}
+      {mountOrb && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]">
+            <Orb
+              hoverIntensity={0.6}
+              rotateOnHover
+              hue={0}
+              forceHoverState={false}
             />
-          )}
-        </AnimatePresence>
+          </div>
+        </div>
+      )}
 
-        <AnimatePresence mode="wait">
-          {!isLoading && <div key="content">{children}</div>}
-        </AnimatePresence>
-      </div>
+      {/* ================= CONTENT ================= */}
+      <div className="relative z-10">{children}</div>
+
+      {/* ================= INTRO OVERLAY (NON-BLOCKING) ================= */}
+      <AnimatePresence>
+        {showIntro && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="fixed inset-0 z-20 pointer-events-none bg-black/40 backdrop-blur-sm"
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
