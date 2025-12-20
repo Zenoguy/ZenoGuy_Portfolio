@@ -269,7 +269,7 @@ function Philosophy() {
 /* HUMAN / HOBBIES                                                     */
 /* ------------------------------------------------------------------ */
 
-export  function HobbiesSection() {
+function HobbiesSection() {
   const hobbies = [
     { 
       icon: "/images/gym.svg", 
