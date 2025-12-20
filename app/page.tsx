@@ -242,14 +242,16 @@ function HeroSection() {
                 </motion.a>
 
                 <motion.a
-                  href="#about"
+                  href="/ShreyanGhosh_CV.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 md:px-10 md:py-5 border-2 border-foreground text-foreground text-base md:text-lg font-black rounded-full"
                   onHoverStart={() => setCursorVariant('hover')}
                   onHoverEnd={() => setCursorVariant('default')}
                 >
-                  ABOUT ME
+                  VIEW RESUME
                 </motion.a>
               </motion.div>
             </motion.div>
@@ -834,7 +836,7 @@ function BlogTeaser() {
               Deep dives into code, tools, and the occasional debugging nightmare turned learning opportunity.
             </p>
             <motion.a
-              href="/blogs"
+              href="/blog"
               whileHover={{ scale: 1.05, x: 10 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-4 text-2xl font-black text-foreground group"

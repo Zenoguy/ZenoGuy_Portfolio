@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 
 const socialLinks = [
   { name: 'GitHub', href: 'https://github.com/zenoguy', icon: Github },
-  { name: 'LinkedIn', href: 'https://linkedin.com/in/shreyanghosh', icon: Linkedin },
-  { name: 'Twitter', href: 'https://twitter.com/zenoguy', icon: Twitter },
-  { name: 'Email', href: 'mailto:shreyan@zenoguy.dev', icon: Mail },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/shreyan-ghosh/', icon: Linkedin },
+  { name: 'Twitter', href: 'https://x.com/IdekXeno', icon: Twitter },
+  { name: 'Email', href: 'mailto:shreyanghosh.dev@gmail.com', icon: Mail },
 ];
 
 const footerLinks = [

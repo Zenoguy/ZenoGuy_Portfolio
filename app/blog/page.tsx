@@ -404,13 +404,7 @@ export default function BlogsPage() {
               Follow on dev.to
             </motion.a>
             
-            <motion.button
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-12 py-6 border-2 border-border text-foreground text-lg font-bold rounded-full hover:border-foreground transition-colors"
-            >
-              Subscribe
-            </motion.button>
+
           </div>
         </motion.div>
       </section>
