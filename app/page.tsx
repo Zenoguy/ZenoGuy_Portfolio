@@ -487,7 +487,7 @@ function FeaturedWork() {
   );
 }
 
-export  function SkillsSection() {
+export function SkillsSection() {
   const [activeSkill, setActiveSkill] = useState(null);
 
   const skills = [
@@ -621,8 +621,8 @@ export  function SkillsSection() {
     : projects;
 
   return (
-    <section className="relative py-40 px-6 overflow-hidden bg-gradient-to-b from-background via-slate-950/30 to-background">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.1),transparent_50%)]" />
+    <section className="relative py-40 px-6 overflow-hidden">
+      {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.1),transparent_50%)]" />*/}
       
       <div className="relative max-w-7xl mx-auto">
         
@@ -635,12 +635,12 @@ export  function SkillsSection() {
           className="mb-24"
         >
           <h2 className="text-6xl md:text-7xl lg:text-8xl font-black leading-[0.85] mb-8">
-            <span className="block text-white">SKILLS</span>
+            <span className="block text-foreground">SKILLS</span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">IN ACTION</span>
           </h2>
           <div className="flex items-center gap-8">
-            <div className="h-1 w-32 bg-white" />
-            <p className="text-xl text-slate-400">
+            <div className="h-1 w-32 bg-foreground" />
+            <p className="text-xl text-muted-foreground">
               {activeSkill ? `Showing projects using ${activeSkill.category}` : 'Hover over skills to see related projects'}
             </p>
           </div>
@@ -664,7 +664,7 @@ export  function SkillsSection() {
                 className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
                   activeSkill?.id === skill.id
                     ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-slate-800 hover:border-blue-500/50 bg-slate-900/30'
+                    : 'border-border hover:border-blue-500/50 bg-card'
                 }`}
               >
                 <div className="flex items-start gap-4">
@@ -679,17 +679,17 @@ export  function SkillsSection() {
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-blue-400 transition-colors">
                       {skill.category}
                     </h3>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {skill.tags.slice(0, 3).map(tag => (
-                        <span key={tag} className="text-xs px-2 py-1 rounded-full bg-slate-800 text-slate-400">
+                        <span key={tag} className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <ul className="space-y-1 text-sm text-slate-400">
+                    <ul className="space-y-1 text-sm text-muted-foreground">
                       {skill.capabilities.slice(0, 2).map((cap, idx) => (
                         <li key={idx} className="flex items-start gap-2">
                           <span className="text-blue-500 mt-0.5">→</span>
@@ -722,83 +722,83 @@ export  function SkillsSection() {
                 transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
-                  {filteredProjects.map((project, i) => (
-                    <motion.div
-                      key={project.id}
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: i * 0.1 }}
-                      whileHover={{ x: 5, transition: { duration: 0.2 } }}
-                      className="group relative p-6 rounded-2xl border-2 border-slate-800 hover:border-blue-500/50 bg-slate-900/50 backdrop-blur-sm transition-all duration-300 overflow-hidden"
-                    >
-                      {/* Background gradient on hover */}
-                      <div 
-                        className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
-                        style={{ background: `linear-gradient(135deg, ${project.color}00, ${project.color})` }}
-                      />
+                {filteredProjects.map((project, i) => (
+                  <motion.div
+                    key={project.id}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                    whileHover={{ x: 5, transition: { duration: 0.2 } }}
+                    className="group relative p-6 rounded-2xl border-2 border-border hover:border-blue-500/50 bg-card backdrop-blur-sm transition-all duration-300 overflow-hidden"
+                  >
+                    {/* Background gradient on hover */}
+                    <div 
+                      className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
+                      style={{ background: `linear-gradient(135deg, ${project.color}00, ${project.color})` }}
+                    />
 
-                      <div className="relative flex gap-4">
-                        {/* Project thumbnail */}
-                        <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-slate-700">
-                          <img 
-                            src={project.image} 
-                            alt={project.title}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                          />
+                    <div className="relative flex gap-4">
+                      {/* Project thumbnail */}
+                      <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-border">
+                        <img 
+                          src={project.image} 
+                          alt={project.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      </div>
+
+                      {/* Project info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="text-2xl font-black text-foreground group-hover:text-blue-400 transition-colors">
+                            {project.title}
+                          </h4>
+                          <span className="text-muted-foreground text-sm flex-shrink-0 ml-2">
+                            #{project.id}
+                          </span>
+                        </div>
+                        
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                          {project.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.map(tag => (
+                            <span 
+                              key={tag} 
+                              className="text-xs px-3 py-1 rounded-full bg-muted text-foreground border border-border"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
 
-                        {/* Project info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between mb-2">
-                            <h4 className="text-2xl font-black text-white group-hover:text-blue-400 transition-colors">
-                              {project.title}
-                            </h4>
-                            <span className="text-slate-600 text-sm flex-shrink-0 ml-2">
-                              #{project.id}
-                            </span>
-                          </div>
-                          
-                          <p className="text-sm text-slate-400 mb-3 line-clamp-2">
-                            {project.description}
-                          </p>
-
-                          <div className="flex flex-wrap gap-2">
-                            {project.tags.map(tag => (
-                              <span 
-                                key={tag} 
-                                className="text-xs px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Links */}
-                          <div className="flex gap-4 mt-4">
-                            <a
-                              href={project.github}
+                        {/* Links */}
+                        <div className="flex gap-4 mt-4">
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-400 font-bold flex items-center gap-1 hover:text-blue-300"
+                          >
+                            VIEW CODE →
+                          </a>
+                          {project.live && (
+                            <a 
+                              href={project.live}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-xs text-blue-400 font-bold flex items-center gap-1 hover:text-blue-300"
+                              className="text-xs text-purple-400 font-bold flex items-center gap-1 hover:text-purple-300"
                             >
-                              VIEW CODE →
+                              LIVE DEMO →
                             </a>
-                            {project.live && (
-                              <a 
-                                href={project.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs text-purple-400 font-bold flex items-center gap-1 hover:text-purple-300"
-                              >
-                                LIVE DEMO →
-                              </a>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
           </div>
         </div>
@@ -815,7 +815,7 @@ export  function SkillsSection() {
             href="/projects"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-block px-12 py-5 border-2 border-white text-white text-lg font-black rounded-full hover:bg-white hover:text-black transition-all"
+            className="inline-block px-12 py-5 border-2 border-foreground text-foreground text-lg font-black rounded-full hover:bg-foreground hover:text-background transition-all"
           >
             VIEW ALL PROJECTS
           </motion.a>
