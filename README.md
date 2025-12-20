@@ -6,9 +6,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-0F172A?style=for-the-badge&logo=tailwindcss&logoColor=38BDF8)
 ![Framer Motion](https://img.shields.io/badge/Framer_Motion-1F1F1F?style=for-the-badge&logo=framer&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![GitHub stars](https://img.shields.io/github/stars/Zenoguy/ZenoGuy_Portfolio?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/Zenoguy/ZenoGuy_Portfolio?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/Zenoguy/ZenoGuy_Portfolio?style=for-the-badge)
+
 
 A **UI-centric developer portfolio** built to showcase projects, skills, and experiments with a strong focus on **visual polish, motion, and interaction**.
 
