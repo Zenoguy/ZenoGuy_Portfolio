@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Orb from "@/components/ui/Orb";
+import FloatingMusicButton from "@/components/FloatingMusicButton";
 
 export default function ClientLayout({
   children,
@@ -56,6 +57,9 @@ export default function ClientLayout({
 
       {/* ================= CONTENT ================= */}
       <div className="relative z-20">{children}</div>
+
+      {/* ================= FLOATING MUSIC BUTTON ================= */}
+      <FloatingMusicButton musicSrc="/audio/BG1.mp3" />
     </div>
   );
 }
