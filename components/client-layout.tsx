@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Orb from "@/components/ui/Orb";
 import FloatingMusicButton from "@/components/FloatingMusicButton";
+import { useClickSound } from "@/hooks/useClickSound";
 
 export default function ClientLayout({
   children,
@@ -12,6 +13,9 @@ export default function ClientLayout({
 }) {
   const [showIntro, setShowIntro] = useState(true);
   const [mountOrb, setMountOrb] = useState(false);
+
+  // Add click sound to all buttons
+  useClickSound('/audio/button-click-3.wav');
 
   useEffect(() => {
     // Let the browser paint FIRST
