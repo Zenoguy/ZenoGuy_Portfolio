@@ -14,7 +14,7 @@ export default function FloatingMusicButton({
   className = "",
 }: FloatingMusicButtonProps) {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(true);
   const [audioError, setAudioError] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const mascotRef = useRef<HTMLImageElement>(null);
