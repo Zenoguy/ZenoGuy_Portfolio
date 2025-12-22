@@ -25,7 +25,7 @@ export default function FloatingMusicButton({
     // Create audio element
     const audio = new Audio();
     audio.loop = true;
-    audio.volume = 0.5;
+    audio.volume = 0.75;
     audio.preload = "auto";
     
     // Add error handler
