@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
-import { ArrowUpRight, Sun, Moon } from "lucide-react";
+import { ArrowUpRight, Sun, Moon, Volume2, VolumeX } from "lucide-react";
 import { useTheme } from "next-themes";
 
 interface Link {
@@ -47,15 +47,32 @@ const CardNav = ({
 }: CardNavProps) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
   const navRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const masterGainRef = useRef<GainNode | null>(null);
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Use useEffect instead of useLayoutEffect to avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
+    
+    // Initialize Web Audio API
+    if (typeof window !== 'undefined' && !audioContextRef.current) {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (AudioContextClass) {
+        audioContextRef.current = new AudioContextClass();
+        masterGainRef.current = audioContextRef.current.createGain();
+        masterGainRef.current.connect(audioContextRef.current.destination);
+        
+        // Make the master gain available globally for other components
+        (window as any).audioContext = audioContextRef.current;
+        (window as any).masterGain = masterGainRef.current;
+      }
+    }
   }, []);
 
   // Better theme detection - use resolvedTheme which accounts for system preference
@@ -135,6 +152,17 @@ const CardNav = ({
     }
   };
 
+  const toggleMute = () => {
+    if (masterGainRef.current) {
+      const newMutedState = !isMuted;
+      masterGainRef.current.gain.setValueAtTime(
+        newMutedState ? 0 : 1,
+        audioContextRef.current?.currentTime || 0
+      );
+      setIsMuted(newMutedState);
+    }
+  };
+
   const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
     if (el) cardsRef.current[i] = el;
   };
@@ -204,24 +232,46 @@ const CardNav = ({
             }}
           />
 
-          {/* Theme toggle */}
-          <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className={`w-9 h-9 flex items-center justify-center rounded-md backdrop-blur-sm transition-all border hover:scale-110 ${
-              isDark
-                ? 'bg-white/10 hover:bg-white/20 border-white/20'
-                : 'bg-black/10 hover:bg-black/20 border-black/20'
-            }`}
-            style={{ 
-              color: isDark ? '#ffffff' : '#0b0616',
-              boxShadow: isDark
-                ? '0 4px 16px rgba(255,255,255,0.1)'
-                : '0 4px 16px rgba(0,0,0,0.1)'
-            }}
-            aria-label="Toggle theme"
-          >
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
+          {/* Controls group */}
+          <div className="flex items-center gap-2">
+            {/* Mute toggle */}
+            <button
+              onClick={toggleMute}
+              className={`w-9 h-9 flex items-center justify-center rounded-md backdrop-blur-sm transition-all border hover:scale-110 ${
+                isDark
+                  ? 'bg-white/10 hover:bg-white/20 border-white/20'
+                  : 'bg-black/10 hover:bg-black/20 border-black/20'
+              }`}
+              style={{ 
+                color: isDark ? '#ffffff' : '#0b0616',
+                boxShadow: isDark
+                  ? '0 4px 16px rgba(255,255,255,0.1)'
+                  : '0 4px 16px rgba(0,0,0,0.1)'
+              }}
+              aria-label={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            </button>
+
+            {/* Theme toggle */}
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              className={`w-9 h-9 flex items-center justify-center rounded-md backdrop-blur-sm transition-all border hover:scale-110 ${
+                isDark
+                  ? 'bg-white/10 hover:bg-white/20 border-white/20'
+                  : 'bg-black/10 hover:bg-black/20 border-black/20'
+              }`}
+              style={{ 
+                color: isDark ? '#ffffff' : '#0b0616',
+                boxShadow: isDark
+                  ? '0 4px 16px rgba(255,255,255,0.1)'
+                  : '0 4px 16px rgba(0,0,0,0.1)'
+              }}
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          </div>
 
         </div>
 

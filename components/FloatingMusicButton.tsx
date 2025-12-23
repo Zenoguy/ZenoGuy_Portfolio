@@ -21,49 +21,82 @@ export default function FloatingMusicButton({
   const [audioError, setAudioError] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioSourceRef = useRef<MediaElementAudioSourceNode | null>(null);
   const mascotRef = useRef<HTMLImageElement>(null);
 
   const beatInterval = useRef<NodeJS.Timeout | null>(null);
   const neglectTimeout = useRef<NodeJS.Timeout | null>(null);
 
   /* ======================================================
-     Audio setup
+     Audio setup with master gain connection
   ====================================================== */
 
   useEffect(() => {
-  const audio = new Audio(musicSrc);
+    const audio = new Audio(musicSrc);
 
-  audio.loop = true;
-  audio.volume = 0.75;
-  audio.preload = "auto";
+    audio.loop = true;
+    audio.volume = 0.75;
+    audio.preload = "auto";
 
-  const handleError = () => {
-    console.error("Audio failed to load:", audio.src);
-    setAudioError(true);
-  };
+    const handleError = () => {
+      console.error("Audio failed to load:", audio.src);
+      setAudioError(true);
+    };
 
-  const handleCanPlay = () => {
-    setAudioError(false);
-  };
+    const handleCanPlay = () => {
+      setAudioError(false);
+    };
 
-  audio.addEventListener("error", handleError);
-  audio.addEventListener("canplaythrough", handleCanPlay);
+    audio.addEventListener("error", handleError);
+    audio.addEventListener("canplaythrough", handleCanPlay);
 
-  audioRef.current = audio;
+    audioRef.current = audio;
 
-  return () => {
-    audio.pause();
+    // Connect to master gain
+    const connectToMasterGain = () => {
+      if (typeof window === 'undefined') return false;
+      
+      const audioContext = (window as any).audioContext as AudioContext;
+      const masterGain = (window as any).masterGain as GainNode;
 
-    audio.removeEventListener("error", handleError);
-    audio.removeEventListener("canplaythrough", handleCanPlay);
+      if (audioContext && masterGain && !audioSourceRef.current) {
+        try {
+          // Create source node from audio element
+          audioSourceRef.current = audioContext.createMediaElementSource(audio);
+          
+          // Connect to master gain (which controls mute/unmute)
+          audioSourceRef.current.connect(masterGain);
+          
+          console.log('Background music connected to master gain');
+          return true;
+        } catch (err) {
+          console.error('Failed to connect audio to master gain:', err);
+        }
+      }
+      return false;
+    };
 
-    // ❌ DO NOT clear src
-    // audio.src = "";  <-- THIS CAUSED THE BUG
+    // Try to connect immediately
+    if (!connectToMasterGain()) {
+      // If not available yet, keep trying
+      const interval = setInterval(() => {
+        if (connectToMasterGain()) {
+          clearInterval(interval);
+        }
+      }, 100);
 
-    audioRef.current = null;
-  };
-}, [musicSrc]);
+      // Cleanup interval after 5 seconds
+      setTimeout(() => clearInterval(interval), 5000);
+    }
 
+    return () => {
+      audio.pause();
+      audio.removeEventListener("error", handleError);
+      audio.removeEventListener("canplaythrough", handleCanPlay);
+      audioRef.current = null;
+      audioSourceRef.current = null;
+    };
+  }, [musicSrc]);
 
   /* ======================================================
      Neglect-based vibration system
@@ -146,8 +179,14 @@ export default function FloatingMusicButton({
      Toggle music
   ====================================================== */
 
-  const toggleMusic = () => {
+  const toggleMusic = async () => {
     if (!audioRef.current || audioError) return;
+
+    // Resume AudioContext if suspended (browser autoplay policy)
+    const audioContext = (window as any).audioContext as AudioContext;
+    if (audioContext && audioContext.state === 'suspended') {
+      await audioContext.resume();
+    }
 
     resetNeglectTimer();
 
