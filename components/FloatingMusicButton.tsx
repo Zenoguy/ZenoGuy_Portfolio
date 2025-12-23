@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
@@ -9,6 +9,9 @@ interface FloatingMusicButtonProps {
   className?: string;
 }
 
+const NEGLECT_DELAY = 8000; // ms before mascot complains
+const REPEAT_DELAY = 12000; // ms between further complaints
+
 export default function FloatingMusicButton({
   musicSrc,
   className = "",
@@ -16,288 +19,214 @@ export default function FloatingMusicButton({
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(true);
   const [audioError, setAudioError] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const mascotRef = useRef<HTMLImageElement>(null);
+
   const beatInterval = useRef<NodeJS.Timeout | null>(null);
+  const neglectTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize audio
+  /* ======================================================
+     Audio setup
+  ====================================================== */
+
   useEffect(() => {
-    // Create audio element
-    const audio = new Audio();
-    audio.loop = true;
-    audio.volume = 0.75;
-    audio.preload = "auto";
-    
-    // Add error handler
-    audio.addEventListener("error", (e) => {
-      console.error("Audio error:", e);
-      console.error("Audio src:", musicSrc);
-      console.error("Audio error code:", audio.error?.code);
-      console.error("Audio error message:", audio.error?.message);
-      setAudioError(true);
-    });
+  const audio = new Audio(musicSrc);
 
-    // Add loaded handler
-    audio.addEventListener("canplaythrough", () => {
-      console.log("Audio loaded successfully");
-      setAudioError(false);
-    });
+  audio.loop = true;
+  audio.volume = 0.75;
+  audio.preload = "auto";
 
-    // Set source AFTER event listeners
-    audio.src = musicSrc;
-    audioRef.current = audio;
+  const handleError = () => {
+    console.error("Audio failed to load:", audio.src);
+    setAudioError(true);
+  };
 
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-        audioRef.current = null;
-      }
-      if (beatInterval.current) {
-        clearInterval(beatInterval.current);
-      }
-    };
-  }, [musicSrc]);
+  const handleCanPlay = () => {
+    setAudioError(false);
+  };
 
-  // Auto-play music on first user interaction
-  useEffect(() => {
-    if (!hasInteracted && !audioError) {
-      const handleFirstInteraction = () => {
-        if (audioRef.current && !isMusicPlaying) {
-          audioRef.current.play().then(() => {
-            setIsMusicPlaying(true);
-            setHasInteracted(true);
-            startBeatAnimation();
-          }).catch((error) => {
-            console.error("Autoplay error:", error);
+  audio.addEventListener("error", handleError);
+  audio.addEventListener("canplaythrough", handleCanPlay);
+
+  audioRef.current = audio;
+
+  return () => {
+    audio.pause();
+
+    audio.removeEventListener("error", handleError);
+    audio.removeEventListener("canplaythrough", handleCanPlay);
+
+    // ❌ DO NOT clear src
+    // audio.src = "";  <-- THIS CAUSED THE BUG
+
+    audioRef.current = null;
+  };
+}, [musicSrc]);
+
+
+  /* ======================================================
+     Neglect-based vibration system
+  ====================================================== */
+
+  const vibrateOnce = useCallback(() => {
+    if (!mascotRef.current || isMusicPlaying) return;
+
+    gsap.killTweensOf(mascotRef.current);
+
+    gsap.fromTo(
+      mascotRef.current,
+      { x: -4 },
+      {
+        x: 4,
+        duration: 0.10,
+        repeat: 8,
+        yoyo: true,
+        ease: "power2.inOut",
+        onComplete: () => {
+          gsap.to(mascotRef.current, {
+            x: 0,
+            duration: 0.1,
           });
-        }
-      };
+        },
+      }
+    );
 
-      document.addEventListener('click', handleFirstInteraction, { once: true });
-      document.addEventListener('keydown', handleFirstInteraction, { once: true });
-      document.addEventListener('touchstart', handleFirstInteraction, { once: true });
-
-      return () => {
-        document.removeEventListener('click', handleFirstInteraction);
-        document.removeEventListener('keydown', handleFirstInteraction);
-        document.removeEventListener('touchstart', handleFirstInteraction);
-      };
-    }
-  }, [hasInteracted, isMusicPlaying, audioError]);
-
-  // Idle tilt and bob animation
-  useEffect(() => {
-    if (mascotRef.current && !isMusicPlaying) {
-      // Kill any existing animations first
-      gsap.killTweensOf(mascotRef.current);
-      
-      // Create a timeline for combined movements
-      const tl = gsap.timeline({ repeat: -1 });
-      
-      tl.to(mascotRef.current, {
-        rotation: 12,
-        y: -8,
-        duration: 1.2,
-        ease: "power1.inOut",
-      })
-      .to(mascotRef.current, {
-        rotation: -12,
-        y: -8,
-        duration: 2.4,
-        ease: "power1.inOut",
-      })
-      .to(mascotRef.current, {
-        rotation: 0,
-        y: 0,
-        duration: 1.2,
-        ease: "power1.inOut",
-      });
-      
-      return () => {
-        tl.kill();
-      };
-    }
+    // schedule next nag if still ignored
+    neglectTimeout.current = setTimeout(vibrateOnce, REPEAT_DELAY);
   }, [isMusicPlaying]);
 
-  // Beat animation when playing
-  const startBeatAnimation = () => {
-    if (beatInterval.current) {
-      clearInterval(beatInterval.current);
+  const resetNeglectTimer = useCallback(() => {
+    if (neglectTimeout.current) {
+      clearTimeout(neglectTimeout.current);
     }
 
-    beatInterval.current = setInterval(() => {
-      if (mascotRef.current && isMusicPlaying) {
-        gsap.to(mascotRef.current, {
-          scale: 1.1,
-          rotation: -5,
-          duration: 0.15,
-          ease: "power2.out",
-          yoyo: true,
-          repeat: 1,
-          onComplete: () => {
-            gsap.to(mascotRef.current, {
-              rotation: 5,
-              duration: 0.15,
-              ease: "power2.out",
-              yoyo: true,
-              repeat: 1,
-              onComplete: () => {
-                gsap.to(mascotRef.current, {
-                  rotation: 0,
-                  duration: 0.1,
-                });
-              },
-            });
-          },
-        });
+    if (!isMusicPlaying && hasInteracted) {
+      neglectTimeout.current = setTimeout(vibrateOnce, NEGLECT_DELAY);
+    }
+  }, [isMusicPlaying, hasInteracted, vibrateOnce]);
+
+  useEffect(() => {
+    resetNeglectTimer();
+    return () => {
+      if (neglectTimeout.current) {
+        clearTimeout(neglectTimeout.current);
       }
+    };
+  }, [resetNeglectTimer]);
+
+  /* ======================================================
+     Beat animation when music plays
+  ====================================================== */
+
+  const startBeatAnimation = () => {
+    if (beatInterval.current) clearInterval(beatInterval.current);
+
+    beatInterval.current = setInterval(() => {
+      if (!mascotRef.current || !isMusicPlaying) return;
+
+      gsap.to(mascotRef.current, {
+        scale: 1.1,
+        rotation: -5,
+        duration: 0.15,
+        ease: "power2.out",
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => {
+          gsap.to(mascotRef.current, {
+            rotation: 0,
+            duration: 0.1,
+          });
+        },
+      });
     }, 600);
   };
 
-  const toggleMusic = () => {
-    if (audioRef.current && !audioError) {
-      if (isMusicPlaying) {
-        audioRef.current.pause();
-        setIsMusicPlaying(false);
-        if (beatInterval.current) {
-          clearInterval(beatInterval.current);
-        }
-        // Reset to idle animation - will be triggered by useEffect
-        gsap.killTweensOf(mascotRef.current);
-        gsap.to(mascotRef.current, {
-          scale: 1,
-          rotation: 0,
-          y: 0,
-          duration: 0.5,
-          ease: "power2.out",
-        });
-      } else {
-        audioRef.current.play().catch((error) => {
-          console.error("Error playing audio:", error);
-          setAudioError(true);
-        });
-        setIsMusicPlaying(true);
-        setHasInteracted(true);
-        
-        // Kill idle animation before starting beat
-        gsap.killTweensOf(mascotRef.current);
-        gsap.to(mascotRef.current, {
-          rotation: 0,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out",
-          onComplete: startBeatAnimation,
-        });
-      }
+  /* ======================================================
+     Toggle music
+  ====================================================== */
 
-      // Click animation
-      if (mascotRef.current) {
-        gsap.to(mascotRef.current, {
-          scale: 0.9,
-          duration: 0.1,
-          yoyo: true,
-          repeat: 1,
-        });
-      }
+  const toggleMusic = () => {
+    if (!audioRef.current || audioError) return;
+
+    resetNeglectTimer();
+
+    if (isMusicPlaying) {
+      audioRef.current.pause();
+      setIsMusicPlaying(false);
+
+      if (beatInterval.current) clearInterval(beatInterval.current);
+
+      gsap.to(mascotRef.current, {
+        scale: 1,
+        rotation: 0,
+        x: 0,
+        y: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    } else {
+      audioRef.current.play().catch(() => setAudioError(true));
+      setIsMusicPlaying(true);
+      setHasInteracted(true);
+
+      gsap.killTweensOf(mascotRef.current);
+      startBeatAnimation();
     }
+
+    // click feedback
+    gsap.to(mascotRef.current, {
+      scale: 0.9,
+      duration: 0.1,
+      yoyo: true,
+      repeat: 1,
+    });
   };
 
-  // Show error state if audio fails
+  /* ======================================================
+     Error UI
+  ====================================================== */
+
   if (audioError) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-        className={`fixed bottom-8 right-8 z-50 ${className}`}
-      >
-        <div className="bg-red-500/20 border border-red-500 rounded-lg p-3 text-red-200 text-xs max-w-[200px]">
-          <div className="font-semibold mb-1">Audio Error</div>
-          <div>Check console for details</div>
-        </div>
-      </motion.div>
+      <div className="fixed bottom-8 right-8 z-50 text-xs text-red-300">
+        Audio failed to load
+      </div>
     );
   }
+
+  /* ======================================================
+     Render
+  ====================================================== */
 
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.5 }}
+      transition={{ duration: 0.5 }}
       className={`fixed bottom-8 right-8 z-50 ${className}`}
+      onMouseEnter={resetNeglectTimer}
     >
       <button
         onClick={toggleMusic}
+        className="relative group focus:outline-none"
         aria-label={isMusicPlaying ? "Pause music" : "Play music"}
-        className="relative group cursor-pointer focus:outline-none"
       >
-        {/* Glow effect */}
         <div
-          className={`absolute inset-0 rounded-full blur-xl transition-opacity duration-300 ${
+          className={`absolute inset-0 rounded-full blur-xl ${
             isMusicPlaying
-              ? "opacity-60 bg-cyan-400/50"
-              : "opacity-30 bg-orange-400/30"
+              ? "bg-cyan-400/50 opacity-60"
+              : "bg-orange-400/30 opacity-30"
           }`}
-          style={{ transform: "scale(1.2)" }}
         />
 
-        {/* Mascot */}
-        <div className="relative">
-          <img
-            ref={mascotRef}
-            src="/audio/Zenoguy_512.png"
-            alt="Zenoguy Music Mascot"
-            className="w-24 h-24 drop-shadow-2xl transition-all duration-300 group-hover:drop-shadow-[0_0_25px_rgba(34,211,238,0.6)]"
-            draggable={false}
-          />
-
-          {/* Music notes animation when playing */}
-          {isMusicPlaying && (
-            <>
-              <motion.div
-                initial={{ opacity: 0, y: 0, x: 0 }}
-                animate={{ 
-                  opacity: [0, 1, 0],
-                  y: -30,
-                  x: -10,
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatDelay: 0.3,
-                }}
-                className="absolute top-0 left-4 text-2xl"
-              >
-                ♪
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 0, x: 0 }}
-                animate={{ 
-                  opacity: [0, 1, 0],
-                  y: -35,
-                  x: 10,
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  repeatDelay: 0.5,
-                  delay: 0.4,
-                }}
-                className="absolute top-2 right-4 text-xl"
-              >
-                ♫
-              </motion.div>
-            </>
-          )}
-        </div>
-
-        {/* Tooltip */}
-        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
-          <div className="bg-black/80 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap backdrop-blur-sm">
-            {isMusicPlaying ? "Pause Music" : "Play Music"}
-          </div>
-        </div>
+        <img
+          ref={mascotRef}
+          src="/audio/Zenoguy_512.png"
+          alt="Music mascot"
+          className="w-24 h-24 drop-shadow-2xl select-none"
+          draggable={false}
+        />
       </button>
     </motion.div>
   );
