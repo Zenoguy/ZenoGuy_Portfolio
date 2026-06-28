@@ -80,10 +80,22 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between items-center pt-8 mt-8 border-t border-border">
-          <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Shreyan Ghosh. All rights reserved.
-          </p>
+        <div className="flex flex-col sm:flex-row justify-between items-center pt-8 mt-8 border-t border-border gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-muted-foreground text-center sm:text-left">
+            <p>
+              © {new Date().getFullYear()} Shreyan Ghosh. All rights reserved.
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="hidden sm:inline text-muted-foreground/30">|</span>
+              <Link href="/privacy" className="hover:text-primary transition-colors">
+                Privacy Policy
+              </Link>
+              <span className="text-muted-foreground/30">|</span>
+              <Link href="/terms" className="hover:text-primary transition-colors">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
           
           <Button
             variant="ghost"
