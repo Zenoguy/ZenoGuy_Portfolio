@@ -64,6 +64,18 @@ export default function Navigation() {
       ],
     },
     {
+      label: "Experience",
+      bgColor: isDark ? "#1A102D" : "#e2e6ea",
+      textColor: isDark ? "#ffffff" : "#000000",
+      links: [
+        {
+          label: "My Experience",
+          ariaLabel: "Navigate to Experience",
+          href: "/experience",
+        },
+      ],
+    },
+    {
       label: "Blog",
       bgColor: isDark ? "#1F1431" : "#ced4da",
       textColor: isDark ? "#ffffff" : "#000000",

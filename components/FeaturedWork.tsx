@@ -3,9 +3,17 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
+import { GitHubRepo } from '@/lib/github';
+
+import { projects as staticProjects } from '@/lib/data/projects';
+
 // Placeholder CardSwap components
 function Card({ children }) {
   return <div className="w-full h-full">{children}</div>;
+}
+
+interface FeaturedWorkProps {
+  initialProjects?: GitHubRepo[] | null;
 }
 
 function CardSwap({ children, cardDistance = 60, verticalDistance = 70, delay = 3000, pauseOnHover = false }) {
@@ -56,35 +64,59 @@ function CardSwap({ children, cardDistance = 60, verticalDistance = 70, delay = 
   );
 }
 
-export default function FeaturedWork() {
+export default function FeaturedWork({ initialProjects }: FeaturedWorkProps) {
   const sectionRef = useRef(null);
   
-  const works = [
-    {
-      title: "SpendSight",
-      subtitle: "FINTECH • AI PIPELINE • HACKATHON WINNER",
-      desc: "Hybrid AI pipeline that parses financial PDFs, classifies transactions through Regex → MiniLM → LLM stages, and generates RAG-powered insights. Multi-bank support, secure storage, and real-time analytics dashboard.",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-      color: "from-blue-500 to-cyan-500",
-      link: "https://github.com/Zenoguy/SpendSight_"
-    },
-    {
-      title: "E2X",
-      subtitle: "LINUX • SECURITY • CRYPTOGRAPHY",
-      desc: "Enterprise-grade secure drive sanitization toolkit with zero-fill and AES-128 encryption wipes. Features partition backup, verification system, and compliance certificate generation for forensic-proof data destruction.",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80",
-      color: "from-purple-500 to-pink-500",
-      link: "https://github.com/Zenoguy/data_wiping_linux"
-    },
-    {
-      title: "Leaf Disease Segmenter",
-      subtitle: "COMPUTER VISION • CONVNEXT • RESEARCH",
-      desc: "Hierarchical panoptic segmentation model using ConvNeXt-Tiny for plant health monitoring. Dual-headed architecture detects leaf regions and disease lesions with custom loss functions, achieving 0.72 F1 score on multi-dataset fusion.",
-      image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200&q=80",
-      color: "from-green-500 to-emerald-500",
-      link: "https://github.com/Zenoguy/Panoptic_Segmentation"
-    },
-  ];
+  const staticWorks = staticProjects.slice(0, 3).map(p => {
+    const colorMap: Record<string, string> = {
+      '#4F46E5': 'from-blue-500 to-cyan-500',
+      '#EC4899': 'from-purple-500 to-pink-500',
+      '#10B981': 'from-green-500 to-emerald-500',
+    };
+    return {
+      title: p.title,
+      subtitle: p.services.join(" • ").toUpperCase(),
+      desc: p.description,
+      image: p.image,
+      color: colorMap[p.color] || "from-blue-500 to-cyan-500",
+      link: p.github
+    };
+  });
+
+  const works = initialProjects && initialProjects.length > 0
+    ? initialProjects
+        .filter(repo => (repo.repositoryTopics?.nodes?.length || 0) > 0)
+        .map((repo, i) => {
+          const gradients = [
+            "from-blue-500 to-cyan-500",
+            "from-purple-500 to-pink-500",
+            "from-green-500 to-emerald-500",
+            "from-orange-500 to-amber-500",
+            "from-indigo-500 to-purple-500",
+            "from-rose-500 to-red-500",
+          ];
+          
+          const images = [
+            "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
+            "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1200&q=80",
+            "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=1200&q=80",
+            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&q=80",
+            "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=80",
+            "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=1200&q=80",
+          ];
+
+          const languages = repo.languages?.nodes?.map(l => l.name).join(" • ").toUpperCase() || "PROJECT";
+
+          return {
+            title: repo.name,
+            subtitle: languages,
+            desc: repo.description || "Dynamic project loaded from GitHub.",
+            image: images[i % images.length],
+            color: gradients[i % gradients.length],
+            link: repo.url
+          };
+        })
+    : staticWorks;
 
   return (
     <section ref={sectionRef} className="relative py-24 md:py-32 lg:py-40 px-4 md:px-6 lg:px-8 overflow-hidden">

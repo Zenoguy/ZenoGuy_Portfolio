@@ -2,8 +2,14 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { projects as rawStaticProjects } from '@/lib/data/projects';
+import { GitHubRepo } from '@/lib/github';
 
-export default function SkillsSection() {
+interface SkillsSectionProps {
+  initialProjects?: GitHubRepo[] | null;
+}
+
+export default function SkillsSection({ initialProjects }: SkillsSectionProps) {
   const [activeSkill, setActiveSkill] = useState(null);
 
   const skills = [
@@ -11,7 +17,7 @@ export default function SkillsSection() {
       id: 'ai-ml',
       category: "AI & Machine Learning",
       icon: "/images/ai-svgrepo-com.svg",
-      tags: ['AI/ML', 'OCR', 'RAG', 'PyTorch', 'CNN', 'Research'],
+      tags: ['AIML', 'OCR', 'RAG', 'PyTorch', 'CNN', 'Research'],
       capabilities: [
         "Deep Learning & Neural Networks",
         "Computer Vision (ConvNeXt, Segmentation)",
@@ -50,7 +56,7 @@ export default function SkillsSection() {
       id: 'frontend',
       category: "Frontend Development",
       icon: "/images/coding-website-svgrepo-com.svg",
-      tags: ['React', 'Next.js', 'UI/UX', 'Java Swing'],
+      tags: ['React', 'Next.js', 'UI-UX', 'Java Swing',],
       capabilities: [
         "Modern Frontend Frameworks",
         "Responsive Web Design",
@@ -74,128 +80,105 @@ export default function SkillsSection() {
     }
   ];
 
-  const projects = [
-    {
-      id: 1,
-      title: 'SpendSight',
-      category: 'FinTech AI Pipeline',
-      description: 'Hybrid AI pipeline parsing financial PDFs with Regex → MiniLM → LLM stages',
-      tags: ['AI/ML', 'OCR', 'RAG', 'Database'],
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-      color: '#4F46E5',
-      github: 'https://github.com/Zenoguy/SpendSight_',
-      live: null
-    },
-    {
-      id: 2,
-      title: 'Data Wiper',
-      category: 'Security Toolkit',
-      description: 'Enterprise-grade secure drive sanitization with AES-128 encryption',
-      tags: ['Linux', 'Cryptography', 'Security'],
-      image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80',
-      color: '#EC4899',
-      github: 'https://github.com/Zenoguy/data_wiping_linux',
-      live: null
-    },
-    {
-      id: 3,
-      title: 'Leaf Disease Segmenter',
-      category: 'Computer Vision',
-      description: 'ConvNeXt-Tiny panoptic segmentation achieving 0.72 F1 score',
-      tags: ['PyTorch', 'CNN', 'Research'],
-      image: 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&q=80',
-      color: '#10B981',
-      github: 'https://github.com/Zenoguy/Panoptic_Segmentation',
-      live: null
-    },
-    {
-      id: 4,
-      title: 'ChatApp',
-      category: 'Desktop Messaging',
-      description: 'Real-time chat with Java Swing, Sockets, and MySQL persistence',
-      tags: ['Java', 'Sockets', 'MySQL'],
-      image: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=800&q=80',
-      color: '#F59E0B',
-      github: 'https://github.com/Zenoguy/ChatApp-Java',
-      live: null
-    },
-    {
-      id: 5,
-      title: 'Space Shooters',
-      category: 'Arcade Game',
-      description: 'Classic space shooter with progressive difficulty and power-ups',
-      tags: ['Python', 'Pygame', 'Game Dev'],
-      image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80',
-      color: '#8B5CF6',
-      github: 'https://github.com/Zenoguy/Space_Shooters',
-      live: 'https://zenoguy.itch.io/space-shooters-concept-game'
-    },
-    {
-      id: 6,
-      title: 'BoldFlow',
-      category: 'Browser Extension',
-      description: 'Bionic reading extension with DOM manipulation and MutationObserver',
-      tags: ['TypeScript', 'Chrome API', 'UI/UX'],
-      image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&q=80',
-      color: '#3B82F6',
-      github: 'https://github.com/Zenoguy/bionic-reader',
-      live: null
-    },
-    {
-      id: 7,
-      title: 'DevGeeks',
-      category: 'Marketing Website',
-      description: 'Modern Next.js site with 3D animations, glassmorphism, and pricing calculators',
-      tags: ['Next.js', 'React', 'UI/UX'],
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
-      color: '#06B6D4',
-      github: 'https://github.com/Rickyy-Sam07/devgeeks-v2',
-      live: null
-    },
-    {
-      id: 8,
-      title: 'E2X ISO',
-      category: 'Bootable Linux Tool',
-      description: 'Secure drive wipe bootable ISO with multi-threat model support',
-      tags: ['Linux', 'Python', 'Security'],
-      image: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&q=80',
-      color: '#EF4444',
-      github: 'https://github.com/Zenoguy/E2X-ISO',
-      live: null
-    },
-    {
-      id: 9,
-      title: 'Hotel Booking',
-      category: 'Web Application',
-      description: 'React hotel booking interface with TypeScript and Tailwind',
-      tags: ['React', 'TypeScript', 'Tailwind'],
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
-      color: '#F59E0B',
-      github: 'https://github.com/Zenoguy/Hotel-Booking',
-      live: 'https://hotel-booking-navy-six.vercel.app'
-    },
-    {
-      id: 10,
-      title: 'Sudoku Game',
-      category: 'Web Game',
-      description: 'Interactive Sudoku with auto-solve algorithm and board generation',
-      tags: ['JavaScript', 'Game Dev', 'Algorithms'],
-      image: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800&q=80',
-      color: '#8B5CF6',
-      github: 'https://github.com/Zenoguy/Sudoku',
-      live: 'https://zenoguy.github.io/Sudoku/'
-    },
-  ];
+  const staticProjects = rawStaticProjects.map(p => ({
+    id: p.id,
+    title: p.title,
+    category: p.category,
+    description: p.description,
+    tags: p.services,
+    image: p.image,
+    color: p.color,
+    github: p.github,
+    live: p.live || null
+  }));
+
+  const dynamicProjects = initialProjects && initialProjects.length > 0
+    ? initialProjects
+      .filter(repo => (repo.repositoryTopics?.nodes?.length || 0) > 0)
+      .map((repo, idx) => {
+        const gradients = [
+          "#4F46E5", "#EC4899", "#10B981", "#F59E0B", "#8B5CF6", "#3B82F6", "#06B6D4", "#EF4444"
+        ];
+
+        const images = [
+          "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80",
+          "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80",
+          "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=800&q=80",
+          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
+          "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80",
+          "https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=800&q=80",
+        ];
+
+        const languages = repo.languages?.nodes?.map(l => l.name) || [];
+        const topics = repo.repositoryTopics?.nodes?.map(t => t.topic.name.toLowerCase()) || [];
+        const desc = repo.description || "No description provided.";
+        const nameLower = repo.name.toLowerCase();
+        const descLower = desc.toLowerCase();
+
+        const categoryIds: string[] = [];
+
+        // Classify solely based on GitHub repository topics
+        // 1. AI / ML
+        if (topics.some(t => ["pytorch", "ai", "ml", "AIML", "machine-learning", "computer-vision", "nlp", "rag", "segmentation", "cnn"].includes(t))) {
+          categoryIds.push("ai-ml");
+        }
+
+        // 2. Security & Linux
+        if (topics.some(t => ["security", "cryptography", "linux", "forensics", "data-wiping", "encryption", "forensic"].includes(t))) {
+          categoryIds.push("linux");
+        }
+
+        // 3. Game Dev
+        if (topics.some(t => ["pygame", "game", "game-dev", "physics", "arcade"].includes(t))) {
+          categoryIds.push("gamedev");
+        }
+
+        // 4. Frontend
+        if (topics.some(t => ["react", "nextjs", "frontend", "ui", "ux", "extension", "chrome-extension", "web", "website"].includes(t))) {
+          categoryIds.push("frontend");
+        }
+
+        // 5. Backend & Systems
+        if (topics.some(t => ["backend", "database", "mysql", "sockets", "api", "systems", "server", "devtools"].includes(t))) {
+          categoryIds.push("backend");
+        }
+
+        if (categoryIds.length === 0) {
+          categoryIds.push("backend");
+        }
+
+        // Use topics as tags, fall back to languages if empty
+        const displayTags = topics.length > 0
+          ? topics.slice(0, 4).map(t => t.toUpperCase())
+          : languages.slice(0, 3).map(l => l.toUpperCase());
+
+        return {
+          id: idx + 1,
+          title: repo.name,
+          category: languages[0] || "Software",
+          description: desc,
+          tags: displayTags,
+          image: images[idx % images.length],
+          color: gradients[idx % gradients.length],
+          github: repo.url,
+          live: repo.homepageUrl || null,
+          categoryIds
+        };
+      })
+    : null;
 
   const filteredProjects = activeSkill
-    ? projects.filter(p => activeSkill.projectIds.includes(p.id))
-    : projects;
+    ? (dynamicProjects
+      ? dynamicProjects.filter(p => p.categoryIds.includes(activeSkill.id))
+      : staticProjects.filter(p => activeSkill.projectIds.includes(p.id))
+    )
+    : (dynamicProjects || staticProjects);
 
   return (
     <section className="relative py-40 px-6 overflow-hidden">
-      
+
       <div className="relative max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -218,7 +201,7 @@ export default function SkillsSection() {
 
         {/* Split Layout */}
         <div className="grid lg:grid-cols-5 gap-8">
-          
+
           {/* LEFT: Skills Column */}
           <div className="lg:col-span-2 space-y-4">
             {skills.map((skill, i) => (
@@ -237,29 +220,27 @@ export default function SkillsSection() {
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 viewport={{ once: true }}
                 onClick={() => setActiveSkill(activeSkill?.id === skill.id ? null : skill)}
-                className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${
-                  activeSkill?.id === skill.id
-                    ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-border hover:border-blue-500/30 bg-card'
-                }`}
+                className={`group relative p-6 rounded-2xl border-2 transition-all duration-300 cursor-pointer ${activeSkill?.id === skill.id
+                  ? 'border-blue-500 bg-blue-500/10'
+                  : 'border-border hover:border-blue-500/30 bg-card'
+                  }`}
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-12 h-12">
-                    <img 
+                    <img
                       src={skill.icon}
                       alt={skill.category}
                       className="w-full h-full transition-all duration-300"
-                      style={{ 
-                        filter: activeSkill?.id === skill.id 
+                      style={{
+                        filter: activeSkill?.id === skill.id
                           ? 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
                           : 'brightness(0) saturate(100%) invert(47%) sepia(96%) saturate(1229%) hue-rotate(192deg) brightness(103%) contrast(101%)'
                       }}
                     />
                   </div>
                   <div className="flex-1">
-                    <h3 className={`text-xl font-bold mb-2 transition-colors ${
-                      activeSkill?.id === skill.id ? 'text-blue-400' : 'text-foreground'
-                    }`}>
+                    <h3 className={`text-xl font-bold mb-2 transition-colors ${activeSkill?.id === skill.id ? 'text-blue-400' : 'text-foreground'
+                      }`}>
                       {skill.category}
                     </h3>
                     <div className="flex flex-wrap gap-2 mb-3">
@@ -312,7 +293,7 @@ export default function SkillsSection() {
                     className="group relative p-6 rounded-2xl border-2 border-border hover:border-blue-500/50 bg-card backdrop-blur-sm transition-all duration-300 overflow-hidden"
                   >
                     {/* Background gradient on hover */}
-                    <div 
+                    <div
                       className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                       style={{ background: `linear-gradient(135deg, ${project.color}00, ${project.color})` }}
                     />
@@ -320,8 +301,8 @@ export default function SkillsSection() {
                     <div className="relative flex gap-4">
                       {/* Project thumbnail */}
                       <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 border border-border">
-                        <img 
-                          src={project.image} 
+                        <img
+                          src={project.image}
                           alt={project.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         />
@@ -337,15 +318,15 @@ export default function SkillsSection() {
                             #{project.id}
                           </span>
                         </div>
-                        
+
                         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                           {project.description}
                         </p>
 
                         <div className="flex flex-wrap gap-2">
                           {project.tags.map(tag => (
-                            <span 
-                              key={tag} 
+                            <span
+                              key={tag}
                               className="text-xs px-3 py-1 rounded-full bg-muted text-foreground border border-border"
                             >
                               {tag}
@@ -364,7 +345,7 @@ export default function SkillsSection() {
                             VIEW CODE →
                           </a>
                           {project.live && (
-                            <a 
+                            <a
                               href={project.live}
                               target="_blank"
                               rel="noopener noreferrer"
