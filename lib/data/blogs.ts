@@ -8,6 +8,7 @@ export interface Blog {
   image: string;
   tags: string[];
   url: string;
+  reactionsCount?: number;
 }
 
 export const blogs: Blog[] = [
